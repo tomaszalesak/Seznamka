@@ -6,6 +6,6 @@ Projektom bude implementovať webovú aplikáciu, systém na zoznamovanie ľudí
 
 ## Autoři
 
-Tomáš Zálešák, UČO 506475
-Jan Sladký, UČO 506465
-Marek Laššák, UČO 485289
+- Tomáš Zálešák, UČO 506475
+- Jan Sladký, UČO 506465
+- Marek Laššák, UČO 485289
