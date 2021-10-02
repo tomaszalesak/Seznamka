@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Common;
 using Domain.Enums;
 
@@ -29,15 +30,18 @@ namespace Domain.Entities
         public int Weight { get; set; }
         
         [MaxLength(255)]
-        public string? Bio { get; set; }
+        public string Bio { get; set; }
         
-        public Coordinates? Location { get; set; }
+        public Coordinates Location { get; set; }
         
         public virtual ICollection<BlockedUser> BlockedUsers { get; set; }
         
-        public virtual ICollection<FriendUser> Friends { get; set; }
+        public virtual ICollection<Friendship> Friendships { get; set; }
         
-        public Preferences? Preferences { get; set; }
+        public Preferences PreferencesId { get; set; }
+        
+        [ForeignKey(nameof(PreferencesId))]
+        public Preferences Preferences { get; set; }
         
         public virtual ICollection<UserPhoto> Photos { get; set; }
     }

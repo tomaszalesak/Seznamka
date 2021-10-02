@@ -5,7 +5,7 @@ using Domain.Common;
 
 namespace Domain.Entities
 {
-    public class Chat : BaseEntity
+    public class Chat
     {
         [Required]
         [MaxLength(50)]

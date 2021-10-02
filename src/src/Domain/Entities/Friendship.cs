@@ -3,7 +3,7 @@ using Domain.Common;
 
 namespace Domain.Entities
 {
-    public class FriendUser : BaseEntity
+    public class Friendship
     {
         public int UserId { get; set; }
         
