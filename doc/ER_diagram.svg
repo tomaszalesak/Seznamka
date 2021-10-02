@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="524px" preserveAspectRatio="none" style="width:873px;height:524px;background:#FFFFFF;" version="1.1" viewBox="0 0 873 524" width="873px" zoomAndPan="magnify"><defs><filter height="300%" id="fvxw473ngd91z" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[e59cf999063292dce8d6ea34dd10a338]
+class user--><rect codeLine="6" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="155.2109" id="user" style="stroke:#A80036;stroke-width:1.5;" width="163" x="315" y="7"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="29" x="382" y="23.1387">User</text><line style="stroke:#A80036;stroke-width:1.5;" x1="316" x2="477" y1="30.9688" y2="30.9688"/><ellipse cx="326" cy="41.9688" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="137" x="335" y="45.1792">id : longint «generated»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="316" x2="477" y1="51.7734" y2="51.7734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="75" x="321" y="65.9839">name : string</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="92" x="321" y="78.7886">surname : string</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="102" x="321" y="91.5933">dateOfBirth : date</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="66" x="321" y="104.3979">gender : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="61" x="321" y="117.2026">height : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="63" x="321" y="130.0073">weight : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="104" x="321" y="142.812">description : string</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="139" x="321" y="155.6167">gpsLocation : gps-coords</text><!--MD5=[6bb6e558aeb000ced9fcefdd74c5bd94]
+class chat--><rect codeLine="20" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="99.1875" id="chat" style="stroke:#A80036;stroke-width:1.5;" width="169" x="7" y="243.5"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="26" x="78.5" y="259.6387">Chat</text><line style="stroke:#A80036;stroke-width:1.5;" x1="8" x2="175" y1="267.4688" y2="267.4688"/><ellipse cx="18" cy="278.4688" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="143" x="27" y="281.6792">id : number «generated»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="8" x2="175" y1="288.2734" y2="288.2734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="139" x="13" y="302.4839">userOneId : longint «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="138" x="13" y="315.2886">userTwoId : longint «FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="8" x2="175" y1="321.8828" y2="321.8828"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="0" x="17" y="336.0933"/><!--MD5=[53b574c9516494271891bbf0f29f537b]
+class msg--><rect codeLine="29" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="86.3828" id="msg" style="stroke:#A80036;stroke-width:1.5;" width="169" x="7" y="424"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="55" x="64" y="440.1387">Message</text><line style="stroke:#A80036;stroke-width:1.5;" x1="8" x2="175" y1="447.9688" y2="447.9688"/><ellipse cx="18" cy="458.9688" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="143" x="27" y="462.1792">id : number «generated»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="8" x2="175" y1="468.7734" y2="468.7734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="114" x="13" y="482.9839">chatId : longint «FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="8" x2="175" y1="489.5781" y2="489.5781"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="65" x="13" y="503.7886">text : string</text><!--MD5=[f145c087bda636b66f40ed057ce44811]
+class block--><rect codeLine="37" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="65.5781" id="block" style="stroke:#A80036;stroke-width:1.5;" width="168" x="211.5" y="260"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="78" x="256.5" y="276.1387">BlockedUser</text><line style="stroke:#A80036;stroke-width:1.5;" x1="212.5" x2="378.5" y1="283.9688" y2="283.9688"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="156" x="217.5" y="298.1792">currentUserId : longint «FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="212.5" x2="378.5" y1="304.7734" y2="304.7734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="129" x="217.5" y="318.9839">blockedUserId : longint</text><!--MD5=[18d0b4c261766414aa4353281c98a865]
+class friend--><rect codeLine="43" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="65.5781" id="friend" style="stroke:#A80036;stroke-width:1.5;" width="168" x="414.5" y="260"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="38" x="479.5" y="276.1387">Friend</text><line style="stroke:#A80036;stroke-width:1.5;" x1="415.5" x2="581.5" y1="283.9688" y2="283.9688"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="156" x="420.5" y="298.1792">currentUserId : longint «FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="415.5" x2="581.5" y1="304.7734" y2="304.7734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="92" x="420.5" y="318.9839">friendId : longint</text><!--MD5=[62110a698cce02fa920c70a444b36fd2]
+class preferences--><rect codeLine="49" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="142.4063" id="preferences" style="stroke:#A80036;stroke-width:1.5;" width="103" x="618" y="222"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="73" x="633" y="238.1387">Preferences</text><line style="stroke:#A80036;stroke-width:1.5;" x1="619" x2="720" y1="245.9688" y2="245.9688"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="91" x="624" y="260.1792">userId : int «FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="619" x2="720" y1="266.7734" y2="266.7734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="69" x="624" y="280.9839">minAge : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="73" x="624" y="293.7886">maxAge : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="83" x="624" y="306.5933">minHeight : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="87" x="624" y="319.3979">maxHeight : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="86" x="624" y="332.2026">minWeight : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="90" x="624" y="345.0073">maxWeight : int</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="82" x="624" y="357.812">gpsRadius : int</text><!--MD5=[0cf71899fd0c0784779c5d322d35e28e]
+class photo--><rect codeLine="61" fill="#FEFECE" filter="url(#fvxw473ngd91z)" height="86.3828" id="photo" style="stroke:#A80036;stroke-width:1.5;" width="103" x="756" y="250"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="62" x="776.5" y="266.1387">UserPhoto</text><line style="stroke:#A80036;stroke-width:1.5;" x1="757" x2="858" y1="273.9688" y2="273.9688"/><ellipse cx="767" cy="284.9688" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="776" y="288.1792">id : int</text><line style="stroke:#A80036;stroke-width:1.0;" x1="757" x2="858" y1="294.7734" y2="294.7734"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="91" x="762" y="308.9839">userId : int «FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="757" x2="858" y1="315.5781" y2="315.5781"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="43" x="762" y="329.7886">content</text><!--MD5=[a45fd57224898287424758fa49246a52]
+link user to chat--><path codeLine="70" d="M331.125,170.414 C331.125,170.414 331.125,249 331.125,249 C331.125,249 184.32,249 184.32,249 " fill="none" id="user-chat" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="184.32" x2="176.32" y1="249" y2="255"/><line style="stroke:#A80036;stroke-width:1.0;" x1="184.32" x2="176.32" y1="249" y2="243"/><line style="stroke:#A80036;stroke-width:1.0;" x1="184.32" x2="176.32" y1="249" y2="249"/><ellipse cx="190.32" cy="249" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;fill:none;"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="327.125" x2="335.125" y1="166.414" y2="166.414"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="327.125" x2="335.125" y1="169.414" y2="169.414"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="331.125" x2="331.125" y1="170.414" y2="162.414"/><!--MD5=[a45fd57224898287424758fa49246a52]
+link user to chat--><path codeLine="71" d="M347.25,170.266 C347.25,170.266 347.25,255 347.25,255 C347.25,255 184.306,255 184.306,255 " fill="none" id="user-chat-1" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="184.306" x2="176.306" y1="255" y2="261"/><line style="stroke:#A80036;stroke-width:1.0;" x1="184.306" x2="176.306" y1="255" y2="249"/><line style="stroke:#A80036;stroke-width:1.0;" x1="184.306" x2="176.306" y1="255" y2="255"/><ellipse cx="190.306" cy="255" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;fill:none;"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="343.25" x2="351.25" y1="166.266" y2="166.266"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="343.25" x2="351.25" y1="169.266" y2="169.266"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="347.25" x2="347.25" y1="170.266" y2="162.266"/><!--MD5=[a2e6e2f79d57ca66083d5c18c17c3731]
+link chat to msg--><path codeLine="72" d="M91.5,350.861 C91.5,350.861 91.5,415.9233 91.5,415.9233 " fill="none" id="chat-msg" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="91.5" x2="97.5" y1="415.9233" y2="423.9233"/><line style="stroke:#A80036;stroke-width:1.0;" x1="91.5" x2="85.5" y1="415.9233" y2="423.9233"/><line style="stroke:#A80036;stroke-width:1.0;" x1="91.5" x2="91.5" y1="415.9233" y2="423.9233"/><ellipse cx="91.5" cy="409.9233" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;fill:none;"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="87.5" x2="95.5" y1="346.861" y2="346.861"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="87.5" x2="95.5" y1="349.861" y2="349.861"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="91.5" x2="91.5" y1="350.861" y2="342.861"/><!--MD5=[a20e5fd457fd93d011c04dbfa528c310]
+link user to block--><path codeLine="73" d="M363.375,170.138 C363.375,170.138 363.375,251.736 363.375,251.736 " fill="none" id="user-block" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="363.375" x2="369.375" y1="251.736" y2="259.736"/><line style="stroke:#A80036;stroke-width:1.0;" x1="363.375" x2="357.375" y1="251.736" y2="259.736"/><line style="stroke:#A80036;stroke-width:1.0;" x1="363.375" x2="363.375" y1="251.736" y2="259.736"/><ellipse cx="363.375" cy="245.736" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;fill:none;"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="359.375" x2="367.375" y1="166.138" y2="166.138"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="359.375" x2="367.375" y1="169.138" y2="169.138"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="363.375" x2="363.375" y1="170.138" y2="162.138"/><!--MD5=[42ad377d6473161d37ea1333e31dbbd7]
+link user to friend--><path codeLine="74" d="M435.667,170.138 C435.667,170.138 435.667,251.736 435.667,251.736 " fill="none" id="user-friend" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="435.667" x2="441.667" y1="251.736" y2="259.736"/><line style="stroke:#A80036;stroke-width:1.0;" x1="435.667" x2="429.667" y1="251.736" y2="259.736"/><line style="stroke:#A80036;stroke-width:1.0;" x1="435.667" x2="435.667" y1="251.736" y2="259.736"/><ellipse cx="435.667" cy="245.736" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;fill:none;"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="431.667" x2="439.667" y1="166.138" y2="166.138"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="431.667" x2="439.667" y1="169.138" y2="169.138"/><line style="stroke:#A80036;stroke-width:1.0;fill:none;" x1="435.667" x2="435.667" y1="170.138" y2="162.138"/><!--MD5=[f8a831eae8bce8cf4eeb8cd4539c53c8]
+link user to preferences--><path codeLine="75" d="M456.833,169.229 C456.833,169.229 456.833,233 456.833,233 C456.833,233 610.748,233 610.748,233 " fill="none" id="user-preferences" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="613.748" x2="613.748" y1="229" y2="237"/><line style="stroke:#A80036;stroke-width:1.0;" x1="610.748" x2="610.748" y1="229" y2="237"/><line style="stroke:#A80036;stroke-width:1.0;" x1="609.748" x2="617.748" y1="233" y2="233"/><line style="stroke:#A80036;stroke-width:1.0;" x1="452.833" x2="460.833" y1="166.229" y2="166.229"/><line style="stroke:#A80036;stroke-width:1.0;" x1="452.833" x2="460.833" y1="169.229" y2="169.229"/><line style="stroke:#A80036;stroke-width:1.0;" x1="456.833" x2="456.833" y1="170.229" y2="162.229"/><!--MD5=[61431223ff85f1db4b16dc9e1ee47ef9]
+link user to photo--><path codeLine="76" d="M486.192,85 C486.192,85 807.5,85 807.5,85 C807.5,85 807.5,241.902 807.5,241.902 " fill="none" id="user-photo" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="807.5" x2="813.5" y1="241.902" y2="249.902"/><line style="stroke:#A80036;stroke-width:1.0;" x1="807.5" x2="801.5" y1="241.902" y2="249.902"/><line style="stroke:#A80036;stroke-width:1.0;" x1="807.5" x2="807.5" y1="241.902" y2="249.902"/><line style="stroke:#A80036;stroke-width:1.0;" x1="811.5" x2="803.5" y1="239.902" y2="239.902"/><line style="stroke:#A80036;stroke-width:1.0;" x1="482.192" x2="482.192" y1="89" y2="81"/><line style="stroke:#A80036;stroke-width:1.0;" x1="485.192" x2="485.192" y1="89" y2="81"/><line style="stroke:#A80036;stroke-width:1.0;" x1="486.192" x2="478.192" y1="85" y2="85"/><!--MD5=[6838c67f26e799e2b0b0f4673130484b]
+@startuml
+hide circle
+skinparam linetype ortho
+
+'https://www.planttext.com/
+
+entity "User" as user {
+  *id : longint <<generated>>
+  - -
+ 'user data
+  name : string
+  surname : string
+  dateOfBirth : date
+  gender : int            
+  height : int
+  weight : int
+  description : string
+  gpsLocation : gps-coords  
+}
+
+entity "Chat" as chat {
+  *id : number <<generated>>
+  - -
+  userOneId : longint <<FK>>
+  userTwoId : longint <<FK>>
+  - -
+  
+}
+
+entity "Message" as msg {
+  *id : number <<generated>>
+  - -
+  chatId : longint <<FK>>
+  - -
+  text : string
+}
+
+entity "BlockedUser" as block {
+  currentUserId : longint <<FK>>
+  - -
+  blockedUserId : longint
+}
+
+entity "Friend" as friend {
+  currentUserId : longint <<FK>>
+  - -
+  friendId : longint
+}
+
+entity "Preferences" as preferences {
+  userId : int <<FK>>
+  - -
+  minAge : int
+  maxAge : int
+  minHeight : int
+  maxHeight : int
+  minWeight : int
+  maxWeight : int
+  gpsRadius : int 
+}
+
+entity "UserPhoto" as photo {
+  *id : int
+  - -
+  userId : int <<FK>>
+  - -
+  content
+}
+
+'links
+user ||..o{ chat
+user ||..o{ chat
+chat ||..o{ msg
+user ||..o{ block
+user ||..o{ friend
+user ||..|| preferences
+user ||..|{ photo
+@enduml
+
+@startuml
+hide circle
+skinparam linetype ortho
+
+
+entity "User" as user {
+  *id : longint <<generated>>
+  - -
+  name : string
+  surname : string
+  dateOfBirth : date
+  gender : int            
+  height : int
+  weight : int
+  description : string
+  gpsLocation : gps-coords  
+}
+
+entity "Chat" as chat {
+  *id : number <<generated>>
+  - -
+  userOneId : longint <<FK>>
+  userTwoId : longint <<FK>>
+  - -
+  
+}
+
+entity "Message" as msg {
+  *id : number <<generated>>
+  - -
+  chatId : longint <<FK>>
+  - -
+  text : string
+}
+
+entity "BlockedUser" as block {
+  currentUserId : longint <<FK>>
+  - -
+  blockedUserId : longint
+}
+
+entity "Friend" as friend {
+  currentUserId : longint <<FK>>
+  - -
+  friendId : longint
+}
+
+entity "Preferences" as preferences {
+  userId : int <<FK>>
+  - -
+  minAge : int
+  maxAge : int
+  minHeight : int
+  maxHeight : int
+  minWeight : int
+  maxWeight : int
+  gpsRadius : int 
+}
+
+entity "UserPhoto" as photo {
+  *id : int
+  - -
+  userId : int <<FK>>
+  - -
+  content
+}
+
+user ||..o{ chat
+user ||..o{ chat
+chat ||..o{ msg
+user ||..o{ block
+user ||..o{ friend
+user ||..|| preferences
+user ||..|{ photo
+@enduml
+
+PlantUML version 1.2021.11beta6(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
