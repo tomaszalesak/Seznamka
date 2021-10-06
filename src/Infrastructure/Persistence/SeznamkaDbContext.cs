@@ -69,7 +69,7 @@ namespace Infrastructure.Persistence
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
 
-            modelBuilder.Seed();
+            // modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
         }
