@@ -1,28 +1,12 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ChatUserOneId = table.Column<int>(type: "int", nullable: true),
-                    ChatUserTwoId = table.Column<int>(type: "int", nullable: true),
-                    Text = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    SendTime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -38,7 +22,6 @@ namespace Infrastructure.Migrations
                     Bio = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Longitude = table.Column<double>(type: "float", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: false),
-                    PreferencesId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -56,22 +39,22 @@ namespace Infrastructure.Migrations
                 name: "Chats",
                 columns: table => new
                 {
-                    UserOneId = table.Column<int>(type: "int", nullable: false),
-                    UserTwoId = table.Column<int>(type: "int", nullable: false),
+                    User1Id = table.Column<int>(type: "int", nullable: false),
+                    User2Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chats", x => new { x.UserOneId, x.UserTwoId });
+                    table.PrimaryKey("PK_Chats", x => new { x.User1Id, x.User2Id });
                     table.ForeignKey(
-                        name: "FK_Chats_Users_UserOneId",
-                        column: x => x.UserOneId,
+                        name: "FK_Chats_Users_User1Id",
+                        column: x => x.User1Id,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Chats_Users_UserTwoId",
-                        column: x => x.UserTwoId,
+                        name: "FK_Chats_Users_User2Id",
+                        column: x => x.User2Id,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -147,25 +130,32 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Bio", "Birthdate", "Gender", "Height", "Latitude", "Longitude", "Name", "PreferencesId", "Surname", "UserId", "Weight" },
-                values: new object[] { 1, "I am Franta.", new DateTime(2003, 10, 2, 11, 18, 51, 122, DateTimeKind.Utc).AddTicks(9070), 0, 200, 2.0, 1.0, "Franta", 0, "Jahoda", null, 100 });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Bio", "Birthdate", "Gender", "Height", "Latitude", "Longitude", "Name", "PreferencesId", "Surname", "UserId", "Weight" },
-                values: new object[] { 2, "I am Frantiska.", new DateTime(2001, 10, 2, 11, 18, 51, 123, DateTimeKind.Utc).AddTicks(2199), 1, 150, 2.0, 1.0, "Frantiska", 0, "Jahodova", null, 50 });
-
-            migrationBuilder.InsertData(
-                table: "Chats",
-                columns: new[] { "UserOneId", "UserTwoId", "Name" },
-                values: new object[] { 1, 2, "Our chat" });
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatUser1Id = table.Column<int>(type: "int", nullable: false),
+                    ChatUser2Id = table.Column<int>(type: "int", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    SendTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Chats_ChatUser1Id_ChatUser2Id",
+                        columns: x => new { x.ChatUser1Id, x.ChatUser2Id },
+                        principalTable: "Chats",
+                        principalColumns: new[] { "User1Id", "User2Id" },
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chats_UserTwoId",
+                name: "IX_Chats_User2Id",
                 table: "Chats",
-                column: "UserTwoId");
+                column: "User2Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FriendUsers_FriendId",
@@ -173,14 +163,15 @@ namespace Infrastructure.Migrations
                 column: "FriendId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ChatUserOneId_ChatUserTwoId",
+                name: "IX_Messages_ChatUser1Id_ChatUser2Id",
                 table: "Messages",
-                columns: new[] { "ChatUserOneId", "ChatUserTwoId" });
+                columns: new[] { "ChatUser1Id", "ChatUser2Id" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Preferences_UserId",
                 table: "Preferences",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPhotos_UserId",
@@ -188,44 +179,21 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_PreferencesId",
-                table: "Users",
-                column: "PreferencesId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_UserId",
                 table: "Users",
                 column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Chats_ChatUserOneId_ChatUserTwoId",
-                table: "Messages",
-                columns: new[] { "ChatUserOneId", "ChatUserTwoId" },
-                principalTable: "Chats",
-                principalColumns: new[] { "UserOneId", "UserTwoId" },
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_Preferences_PreferencesId",
-                table: "Users",
-                column: "PreferencesId",
-                principalTable: "Preferences",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Preferences_Users_UserId",
-                table: "Preferences");
-
             migrationBuilder.DropTable(
                 name: "FriendUsers");
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "Preferences");
 
             migrationBuilder.DropTable(
                 name: "UserPhotos");
@@ -235,9 +203,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Preferences");
         }
     }
 }

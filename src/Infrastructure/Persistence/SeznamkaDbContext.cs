@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Infrastructure.Persistence
 {
@@ -26,27 +26,49 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasOne(a => a.Preferences)
-                .WithOne().HasForeignKey<User>(a => a.PreferencesId);
-
-            modelBuilder.Entity<Chat>().HasKey(chat => new { chat.UserOneId, chat.UserTwoId });
-
-            modelBuilder.Entity<Friendship>()
-                .HasKey(fs => new { fs.UserId, fs.FriendId });
+                .HasOne(u => u.Preferences)
+                .WithOne(p => p.User)
+                .HasForeignKey<Preferences>(p => p.UserId);
 
             modelBuilder.Entity<Friendship>()
-              .HasOne(fs => fs.User)
-              .WithMany(u => u.Friendships)
-              .HasForeignKey(fs => fs.UserId);
+              .HasKey(f => new { f.UserId, f.FriendId });
 
             modelBuilder.Entity<Friendship>()
-                .HasOne(fs => fs.Friend)
+                .HasOne(f => f.User)
+                .WithMany(u => u.Friendships)
+                .HasForeignKey(f => f.UserId);
+
+            modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Friend)
                 .WithMany()
-                .HasForeignKey(fs => fs.FriendId);
+                .HasForeignKey(f => f.FriendId);
+
+            modelBuilder.Entity<Chat>()
+                .HasKey(c => new { c.User1Id, c.User2Id });
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.User1)
+                .WithMany(u => u.Chats)
+                .HasForeignKey(c => c.User1Id);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.User2)
+                .WithMany()
+                .HasForeignKey(c => c.User2Id);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Chat)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(m => new { m.ChatUser1Id, m.ChatUser2Id });
+
+            modelBuilder.Entity<UserPhoto>()
+                .HasOne(up => up.User)
+                .WithMany(u => u.Photos)
+                .HasForeignKey(up => up.UserId);
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            
+
             modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);

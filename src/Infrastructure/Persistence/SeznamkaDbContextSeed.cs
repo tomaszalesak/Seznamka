@@ -1,7 +1,7 @@
-﻿using System;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Infrastructure.Persistence
 {
@@ -11,18 +11,18 @@ namespace Infrastructure.Persistence
         public static void Seed(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(new User
-                {
-                    Id = 1,
-                    Name = "Franta",
-                    Surname = "Jahoda",
-                    Birthdate = DateTime.UtcNow.AddYears(-18),
-                    Gender = Gender.Male,
-                    Height = 200,
-                    Weight = 100,
-                    Bio = "I am Franta.",
-                    Longitude = 1,
-                    Latitude = 2
-                },
+            {
+                Id = 1,
+                Name = "Franta",
+                Surname = "Jahoda",
+                Birthdate = DateTime.UtcNow.AddYears(-18),
+                Gender = Gender.Male,
+                Height = 200,
+                Weight = 100,
+                Bio = "I am Franta.",
+                Longitude = 1,
+                Latitude = 2
+            },
                 new User
                 {
                     Id = 2,
@@ -54,17 +54,15 @@ namespace Infrastructure.Persistence
             (
                 new Chat
                 {
-                    Name = "Our chat",
-                    UserOneId = 1,
-                    UserTwoId = 2
+                    Name = "Our chat"
                 }
             );
 
             modelBuilder.Entity<Message>().HasData
             (
-       
                 new Message
                 {
+                    Id = 1,
                     Text = "Hello there",
                     SendTime = DateTime.Now.AddMinutes(-5)
                 }
@@ -73,6 +71,7 @@ namespace Infrastructure.Persistence
             modelBuilder.Entity<Preferences>().HasData(
                 new Preferences
                 {
+                    Id = 1,
                     UserId = 1,
                     MinAge = 19,
                     MaxAge = 25,
@@ -87,6 +86,7 @@ namespace Infrastructure.Persistence
             modelBuilder.Entity<UserPhoto>().HasData(
                 new UserPhoto
                 {
+                    Id = 1,
                     UserId = 1
                 }
             );

@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Common;
 
 namespace Domain.Entities
 {
@@ -8,7 +6,6 @@ namespace Domain.Entities
     {
         public int UserId { get; set; }
 
-        [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
 
         [Required]

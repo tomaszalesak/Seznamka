@@ -1,23 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
     public class Chat
     {
-        [Required] [MaxLength(50)]
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
 
-        public int UserOneId { get; set; }
+        public int User1Id { get; set; }
 
-        [ForeignKey(nameof(UserOneId))]
-        public virtual User UserOne { get; set; }
+        public virtual User User1 { get; set; }
 
-        public int UserTwoId { get; set; }
+        public int User2Id { get; set; }
 
-        [ForeignKey(nameof(UserTwoId))]
-        public virtual User UserTwo { get; set; }
+        public virtual User User2 { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
     }

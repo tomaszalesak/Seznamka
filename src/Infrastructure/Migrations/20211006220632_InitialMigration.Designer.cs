@@ -4,14 +4,16 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SeznamkaDbContext))]
-    partial class SeznamkaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211006220632_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,10 +23,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Chat", b =>
                 {
-                    b.Property<int>("UserOneId")
+                    b.Property<int>("User1Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserTwoId")
+                    b.Property<int>("User2Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -32,19 +34,11 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("UserOneId", "UserTwoId");
+                    b.HasKey("User1Id", "User2Id");
 
-                    b.HasIndex("UserTwoId");
+                    b.HasIndex("User2Id");
 
                     b.ToTable("Chats");
-
-                    b.HasData(
-                        new
-                        {
-                            UserOneId = 1,
-                            UserTwoId = 2,
-                            Name = "Our chat"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Friendship", b =>
@@ -69,10 +63,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ChatUserOneId")
+                    b.Property<int>("ChatUser1Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ChatUserTwoId")
+                    b.Property<int>("ChatUser2Id")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SendTime")
@@ -85,7 +79,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatUserOneId", "ChatUserTwoId");
+                    b.HasIndex("ChatUser1Id", "ChatUser2Id");
 
                     b.ToTable("Messages");
                 });
@@ -123,7 +117,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Preferences");
                 });
@@ -159,9 +154,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("PreferencesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -175,42 +167,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PreferencesId")
-                        .IsUnique();
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Bio = "I am Franta.",
-                            Birthdate = new DateTime(2003, 10, 2, 11, 18, 51, 122, DateTimeKind.Utc).AddTicks(9070),
-                            Gender = 0,
-                            Height = 200,
-                            Latitude = 2.0,
-                            Longitude = 1.0,
-                            Name = "Franta",
-                            PreferencesId = 0,
-                            Surname = "Jahoda",
-                            Weight = 100
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Bio = "I am Frantiska.",
-                            Birthdate = new DateTime(2001, 10, 2, 11, 18, 51, 123, DateTimeKind.Utc).AddTicks(2199),
-                            Gender = 1,
-                            Height = 150,
-                            Latitude = 2.0,
-                            Longitude = 1.0,
-                            Name = "Frantiska",
-                            PreferencesId = 0,
-                            Surname = "Jahodova",
-                            Weight = 50
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
@@ -235,21 +194,21 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Chat", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "UserOne")
-                        .WithMany()
-                        .HasForeignKey("UserOneId")
+                    b.HasOne("Domain.Entities.User", "User1")
+                        .WithMany("Chats")
+                        .HasForeignKey("User1Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "UserTwo")
+                    b.HasOne("Domain.Entities.User", "User2")
                         .WithMany()
-                        .HasForeignKey("UserTwoId")
+                        .HasForeignKey("User2Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("UserOne");
+                    b.Navigation("User1");
 
-                    b.Navigation("UserTwo");
+                    b.Navigation("User2");
                 });
 
             modelBuilder.Entity("Domain.Entities.Friendship", b =>
@@ -275,8 +234,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Chat", "Chat")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatUserOneId", "ChatUserTwoId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ChatUser1Id", "ChatUser2Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Chat");
                 });
@@ -284,8 +244,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Preferences", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("Preferences")
+                        .HasForeignKey("Domain.Entities.Preferences", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -294,18 +254,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.HasOne("Domain.Entities.Preferences", "Preferences")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.User", "PreferencesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.User", null)
                         .WithMany("BlockedUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Preferences");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
@@ -328,9 +280,13 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("BlockedUsers");
 
+                    b.Navigation("Chats");
+
                     b.Navigation("Friendships");
 
                     b.Navigation("Photos");
+
+                    b.Navigation("Preferences");
                 });
 #pragma warning restore 612, 618
         }
