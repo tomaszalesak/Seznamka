@@ -12,7 +12,6 @@ namespace Infrastructure.Persistence
         {
             modelBuilder.Entity<User>().HasData(new User
                 {
-                    Id = 1,
                     Name = "Franta",
                     Surname = "Jahoda",
                     Birthdate = DateTime.UtcNow.AddYears(-18),
@@ -25,7 +24,6 @@ namespace Infrastructure.Persistence
                 },
                 new User
                 {
-                    Id = 2,
                     Name = "Frantiska",
                     Surname = "Jahodova",
                     Birthdate = DateTime.UtcNow.AddYears(-20),
