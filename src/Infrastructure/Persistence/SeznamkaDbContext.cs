@@ -25,11 +25,8 @@ namespace Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasOne(a => a.Preferences)
-                .WithOne().HasForeignKey<User>(a => a.PreferencesId);
-
-            modelBuilder.Entity<Chat>().HasKey(chat => new { chat.UserOneId, chat.UserTwoId });
+            modelBuilder.Entity<Chat>()
+                .HasKey(chat => new { chat.UserOneId, chat.UserTwoId });
 
             modelBuilder.Entity<Friendship>()
                 .HasKey(fs => new { fs.UserId, fs.FriendId });

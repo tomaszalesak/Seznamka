@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SeznamkaDbContext))]
-    [Migration("20211002111851_InitialCreate")]
+    [Migration("20211006215620_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,13 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FriendId");
 
                     b.ToTable("FriendUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            FriendId = 2
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
@@ -90,6 +97,14 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ChatUserOneId", "ChatUserTwoId");
 
                     b.ToTable("Messages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            SendTime = new DateTime(2021, 10, 6, 23, 51, 19, 857, DateTimeKind.Local).AddTicks(9565),
+                            Text = "Hello there"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Preferences", b =>
@@ -120,14 +135,22 @@ namespace Infrastructure.Migrations
                     b.Property<int>("MinWeight")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Preferences");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GpsRadius = 5,
+                            MaxAge = 25,
+                            MaxHeight = 175,
+                            MaxWeight = 90,
+                            MinAge = 19,
+                            MinHeight = 150,
+                            MinWeight = 50
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -177,8 +200,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PreferencesId")
-                        .IsUnique();
+                    b.HasIndex("PreferencesId");
 
                     b.HasIndex("UserId");
 
@@ -189,13 +211,13 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1,
                             Bio = "I am Franta.",
-                            Birthdate = new DateTime(2003, 10, 2, 11, 18, 51, 122, DateTimeKind.Utc).AddTicks(9070),
+                            Birthdate = new DateTime(2003, 10, 6, 21, 56, 19, 857, DateTimeKind.Utc).AddTicks(5248),
                             Gender = 0,
                             Height = 200,
                             Latitude = 2.0,
                             Longitude = 1.0,
                             Name = "Franta",
-                            PreferencesId = 0,
+                            PreferencesId = 1,
                             Surname = "Jahoda",
                             Weight = 100
                         },
@@ -203,15 +225,29 @@ namespace Infrastructure.Migrations
                         {
                             Id = 2,
                             Bio = "I am Frantiska.",
-                            Birthdate = new DateTime(2001, 10, 2, 11, 18, 51, 123, DateTimeKind.Utc).AddTicks(2199),
+                            Birthdate = new DateTime(2001, 10, 6, 21, 56, 19, 857, DateTimeKind.Utc).AddTicks(7318),
                             Gender = 1,
                             Height = 150,
                             Latitude = 2.0,
                             Longitude = 1.0,
                             Name = "Frantiska",
-                            PreferencesId = 0,
+                            PreferencesId = 1,
                             Surname = "Jahodova",
                             Weight = 50
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Bio = "",
+                            Birthdate = new DateTime(1981, 10, 6, 21, 56, 19, 857, DateTimeKind.Utc).AddTicks(7332),
+                            Gender = 2,
+                            Height = 185,
+                            Latitude = 3.0,
+                            Longitude = 2.0,
+                            Name = "Petr",
+                            PreferencesId = 1,
+                            Surname = "Smutný",
+                            Weight = 94
                         });
                 });
 
@@ -233,6 +269,13 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserPhotos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat", b =>
@@ -283,22 +326,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Chat");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Preferences", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.HasOne("Domain.Entities.Preferences", "Preferences")
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.User", "PreferencesId")
+                        .WithMany()
+                        .HasForeignKey("PreferencesId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

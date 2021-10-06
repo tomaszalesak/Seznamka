@@ -15,8 +15,9 @@ namespace SampleConsoleApp
             
             using (var context = new SeznamkaDbContext())
             {
-                var user = new User
+                /*var user = new User
                 {
+                    Id = 1,
                     Name = "Jan",
                     Surname = "Jahoda",
                     Birthdate = DateTime.UtcNow.AddYears(-18),
@@ -31,9 +32,11 @@ namespace SampleConsoleApp
                 context.SaveChanges();
                 
                 userId = user.Id;
-                
+
+
                 var user2 = new User
                 {
+                    Id = 2,
                     Name = "Jana",
                     Surname = "Jahodova",
                     Birthdate = DateTime.UtcNow.AddYears(-18),
@@ -77,6 +80,7 @@ namespace SampleConsoleApp
 
                 var message = new Message
                 {
+                    Id = 1,
                     Text = "Hello",
                     Chat = chat,
                     SendTime = DateTime.UtcNow.AddMinutes(-5)
@@ -87,6 +91,7 @@ namespace SampleConsoleApp
 
                 var userPhoto = new UserPhoto
                 {
+                    Id = 1,
                     UserId = user.Id,
                     User = user
                 };
@@ -96,6 +101,7 @@ namespace SampleConsoleApp
 
                 var prefs = new Preferences
                 {
+                    Id = 1,
                     UserId = user.Id,
                     User = user,
                     MinAge = 19,
@@ -108,26 +114,9 @@ namespace SampleConsoleApp
                 };
 
                 context.Add(prefs);
-                context.SaveChanges();
+                context.SaveChanges();*/
             }
 
-            using (var context = new SeznamkaDbContext())
-            {
-                var user = context.Users.Single(user => user.Id == userId);
-                foreach (var animal in user.Friendships)
-                {
-                    Console.WriteLine(animal.Name);
-                }
-
-                var ripAnimal = context.Animal.First(a => a.Id == animal2Id);
-                context.Remove(ripAnimal);
-                context.SaveChanges();
-
-                foreach (var animal in enclosure.Animals)
-                {
-                    Console.WriteLine(animal.Name);
-                }
-            }
         }
     }
 }
