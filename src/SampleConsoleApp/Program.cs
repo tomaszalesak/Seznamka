@@ -50,6 +50,65 @@ namespace SampleConsoleApp
                 userId = user.Id;
 
                 context.SaveChanges();
+
+                var friendship = new Friendship
+                {
+                    UserId = user.Id,
+                    User = user,
+                    FriendId = user2.Id,
+                    Friend = user2
+                };
+
+                context.Add(friendship);
+                context.SaveChanges();
+
+                var chat = new Chat
+                {
+                    Name = "Test chat",
+                    UserOneId = user.Id,
+                    UserOne = user,
+                    UserTwoId = user2.Id,
+                    UserTwo = user2,
+
+                };
+
+                context.Add(chat);
+                context.SaveChanges();
+
+                var message = new Message
+                {
+                    Text = "Hello",
+                    Chat = chat,
+                    SendTime = DateTime.UtcNow.AddMinutes(-5)
+                };
+
+                context.Add(message);
+                context.SaveChanges();
+
+                var userPhoto = new UserPhoto
+                {
+                    UserId = user.Id,
+                    User = user
+                };
+
+                context.Add(userPhoto);
+                context.SaveChanges();
+
+                var prefs = new Preferences
+                {
+                    UserId = user.Id,
+                    User = user,
+                    MinAge = 19,
+                    MaxAge = 25,
+                    MinWeight = 50,
+                    MaxWeight = 90,
+                    MinHeight = 150,
+                    MaxHeight = 175,
+                    GpsRadius = 5
+                };
+
+                context.Add(prefs);
+                context.SaveChanges();
             }
 
             using (var context = new SeznamkaDbContext())

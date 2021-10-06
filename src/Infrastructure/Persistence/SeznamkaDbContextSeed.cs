@@ -12,6 +12,7 @@ namespace Infrastructure.Persistence
         {
             modelBuilder.Entity<User>().HasData(new User
                 {
+                    Id = 1,
                     Name = "Franta",
                     Surname = "Jahoda",
                     Birthdate = DateTime.UtcNow.AddYears(-18),
@@ -24,6 +25,7 @@ namespace Infrastructure.Persistence
                 },
                 new User
                 {
+                    Id = 2,
                     Name = "Frantiska",
                     Surname = "Jahodova",
                     Birthdate = DateTime.UtcNow.AddYears(-20),
@@ -33,6 +35,19 @@ namespace Infrastructure.Persistence
                     Bio = "I am Frantiska.",
                     Longitude = 1,
                     Latitude = 2
+                },
+                new User
+                {
+                    Id = 3,
+                    Name = "Petr",
+                    Surname = "Smutný",
+                    Birthdate = DateTime.UtcNow.AddYears(-40),
+                    Gender = Gender.Other,
+                    Height = 185,
+                    Weight = 94,
+                    Bio = string.Empty,
+                    Longitude = 2,
+                    Latitude = 3
                 });
 
             modelBuilder.Entity<Chat>().HasData
@@ -42,6 +57,37 @@ namespace Infrastructure.Persistence
                     Name = "Our chat",
                     UserOneId = 1,
                     UserTwoId = 2
+                }
+            );
+
+            modelBuilder.Entity<Message>().HasData
+            (
+       
+                new Message
+                {
+                    Text = "Hello there",
+                    SendTime = DateTime.Now.AddMinutes(-5)
+                }
+            );
+
+            modelBuilder.Entity<Preferences>().HasData(
+                new Preferences
+                {
+                    UserId = 1,
+                    MinAge = 19,
+                    MaxAge = 25,
+                    MinWeight = 50,
+                    MaxWeight = 90,
+                    MinHeight = 150,
+                    MaxHeight = 175,
+                    GpsRadius = 5
+                }
+            );
+
+            modelBuilder.Entity<UserPhoto>().HasData(
+                new UserPhoto
+                {
+                    UserId = 1
                 }
             );
         }
