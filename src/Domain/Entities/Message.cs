@@ -5,9 +5,11 @@ namespace Domain.Entities
 {
     public class Message : BaseEntity
     {
-        public int ChatUser1Id { get; set; }
-
-        public int ChatUser2Id { get; set; }
+        public int AuthorId { get; set; }
+        
+        public virtual User Author { get; set; }
+        
+        public int ChatId { get; set; }
 
         public virtual Chat Chat { get; set; }
 

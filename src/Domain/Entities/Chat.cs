@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
-    public class Chat
+    public class Chat : BaseEntity
     {
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public int User1Id { get; set; }
+        public int MemberOneId { get; set; }
 
-        public virtual User User1 { get; set; }
+        public virtual User MemberOne { get; set; }
 
-        public int User2Id { get; set; }
+        public int MemberTwoId { get; set; }
 
-        public virtual User User2 { get; set; }
+        public virtual User MemberTwo { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
     }

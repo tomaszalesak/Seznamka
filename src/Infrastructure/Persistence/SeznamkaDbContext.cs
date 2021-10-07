@@ -44,22 +44,24 @@ namespace Infrastructure.Persistence
                 .HasForeignKey(f => f.FriendId);
 
             modelBuilder.Entity<Chat>()
-                .HasKey(c => new { c.User1Id, c.User2Id });
-
-            modelBuilder.Entity<Chat>()
-                .HasOne(c => c.User1)
+                .HasOne(c => c.MemberOne)
                 .WithMany(u => u.Chats)
-                .HasForeignKey(c => c.User1Id);
+                .HasForeignKey(c => c.MemberOneId);
 
             modelBuilder.Entity<Chat>()
-                .HasOne(c => c.User2)
+                .HasOne(c => c.MemberTwo)
                 .WithMany()
-                .HasForeignKey(c => c.User2Id);
+                .HasForeignKey(c => c.MemberTwoId);
 
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
-                .HasForeignKey(m => new { m.ChatUser1Id, m.ChatUser2Id });
+                .HasForeignKey(m => m.ChatId );
+            
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Author)
+                .WithMany()
+                .HasForeignKey(m => m.AuthorId );
 
             modelBuilder.Entity<UserPhoto>()
                 .HasOne(up => up.User)
@@ -69,7 +71,7 @@ namespace Infrastructure.Persistence
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
 
-            // modelBuilder.Seed();
+            modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
         }
