@@ -1,6 +1,8 @@
+using Domain.Repositories;
+
 namespace Infrastructure.Persistence.Repositories
 {
-    public class ChatRepository
+    public class ChatRepository : IChatRepository
     {
         
     }

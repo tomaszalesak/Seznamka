@@ -1,7 +1,9 @@
+using Domain.Entities;
+using Domain.Repositories.Base;
+
 namespace Domain.Repositories
 {
-    public class IChatRepository
+    public interface IChatRepository : IRepository<Chat>
     {
-        
     }
 }
