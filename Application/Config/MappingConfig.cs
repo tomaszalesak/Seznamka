@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.DTOs;
 using AutoMapper;
-using BL.DTOs;
 using Domain.Entities;
 
-namespace BL.Config
+namespace Application.Config
 {
     class MappingConfig
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BL
+namespace Application
 {
     public class Class1
     {

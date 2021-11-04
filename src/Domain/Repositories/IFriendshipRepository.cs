@@ -3,7 +3,8 @@ using Domain.Repositories.Base;
 
 namespace Domain.Repositories
 {
-    public interface IFriendshipRepository : IRepository<Friendship>
+    public interface IFriendshipRepository : IGenericRepository<Friendship>
     {
+        
     }
 }

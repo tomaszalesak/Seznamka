@@ -3,7 +3,7 @@ using Domain.Repositories.Base;
 
 namespace Domain.Repositories
 {
-    public interface IUserPhotoRepository : IRepository<UserPhoto>
+    public interface IUserPhotoRepository : IGenericRepository<UserPhoto>
     {
     }
 }

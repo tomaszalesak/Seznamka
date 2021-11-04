@@ -4,7 +4,7 @@ using Infrastructure.Persistence.Repositories.Base;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class ChatRepository : GenericRepository<Chat>, IChatRepository
+    public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
     }
 }

@@ -3,7 +3,7 @@ using Domain.Repositories.Base;
 
 namespace Domain.Repositories
 {
-    public interface IChatRepository : IRepository<Chat>
+    public interface IChatRepository : IGenericRepository<Chat>
     {
     }
 }

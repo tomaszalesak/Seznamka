@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{05A474AE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "src\ConsoleApp\ConsoleApp.csproj", "{E8F766BA-04A2-4452-8910-3FDBDC204BD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BL", "BL\BL.csproj", "{9CA6260F-0122-4947-9F6C-C19D273F1711}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{9CA6260F-0122-4947-9F6C-C19D273F1711}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3AC85B9D-4909-4B71-9B74-CC32558C33DD} = {3AC85B9D-4909-4B71-9B74-CC32558C33DD}
 	EndProjectSection

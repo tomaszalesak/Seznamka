@@ -3,7 +3,7 @@ using Domain.Repositories.Base;
 
 namespace Domain.Repositories
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository : IGenericRepository<User>
     {
     }
 }

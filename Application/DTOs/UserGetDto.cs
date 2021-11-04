@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Domain.Entities;
 using Domain.Enums;
-namespace BL.DTOs
+namespace Application.DTOs
 {
     class UserGetDto
     {

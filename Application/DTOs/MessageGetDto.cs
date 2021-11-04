@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BL.DTOs
+namespace Application.DTOs
 {
     class MessageGetDto
     {
