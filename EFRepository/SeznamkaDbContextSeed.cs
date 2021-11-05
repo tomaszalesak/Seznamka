@@ -3,7 +3,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence
+namespace EFInfrastructure
 {
     public static class SeznamkaDbContextSeed
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace Infrastructure.Persistence
+namespace EFInfrastructure
 {
     public class SeznamkaDbContext : DbContext
     {
@@ -56,12 +56,12 @@ namespace Infrastructure.Persistence
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
-                .HasForeignKey(m => m.ChatId );
-            
+                .HasForeignKey(m => m.ChatId);
+
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Author)
                 .WithMany()
-                .HasForeignKey(m => m.AuthorId );
+                .HasForeignKey(m => m.AuthorId);
 
             modelBuilder.Entity<UserPhoto>()
                 .HasOne(up => up.User)
