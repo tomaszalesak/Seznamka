@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces.RepositoryInterfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
@@ -11,7 +12,10 @@ namespace Domain.Interfaces
         IPreferencesRepository PreferencesRepository { get; }
         IUserPhotoRepository UserPhotoRepository { get; }
         IUserRepository UserRepository { get; }
-        
+
         //todo add query interfaces if implemented
+
+        void SaveChanges();
+        Task SaveChangesAsync();
     }
 }
