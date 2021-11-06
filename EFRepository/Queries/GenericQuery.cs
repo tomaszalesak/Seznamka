@@ -10,28 +10,41 @@ namespace EFInfrastructure.Queries
 {
     public class GenericQuery<T> : IGenericQuery<T> where T : class
     {
-        public IQueryable<T> CurrentResult { get; set; }
+        protected SeznamkaDbContext _context;
+        protected IQueryable<T> CurrentQueryResult { get; set; }
+
+        protected GenericQuery(SeznamkaDbContext context)
+        {
+            _context = context;
+            CurrentQueryResult = _context.Set<T>();
+        }
+
+        protected GenericQuery()
+        {
+            _context = new SeznamkaDbContext();
+            CurrentQueryResult = _context.Set<T>();
+        }
 
         public async Task<IEnumerable<T>> ExecuteQueryAsync()
         {
-            return await CurrentResult?.ToListAsync() ?? new List<T>();
+            return await CurrentQueryResult?.ToListAsync() ?? new List<T>();
         }
 
         public void OrderBy<TKey>(Expression<Func<T, TKey>> keySelector, bool isAscendingOrder = true)
         {
             if (isAscendingOrder)
             {
-                CurrentResult.OrderBy(keySelector);
+                CurrentQueryResult.OrderBy(keySelector);
             }
             else
             {
-                CurrentResult.OrderByDescending(keySelector);
+                CurrentQueryResult.OrderByDescending(keySelector);
             }
         }
 
         public void Page(int pageSize, int pageNumber)  //pages are numbered from 1
         {
-            CurrentResult = CurrentResult.Skip(pageSize * (pageNumber - 1))
+            CurrentQueryResult = CurrentQueryResult.Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize);
         }
     }
