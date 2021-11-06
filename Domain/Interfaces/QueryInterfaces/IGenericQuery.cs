@@ -8,8 +8,9 @@ namespace Domain.Interfaces.QueryInterfaces
 {
     public interface IGenericQuery<TEntity> where TEntity : class
     {
-        void OrderBy<TKey>(Expression<Func<TEntity, TKey>> keySelector, bool isAscendingOrder = true);
-        void Page(int pageSize, int pageNumber);
+        IGenericQuery<TEntity> Where(Expression<Func<TEntity, bool>> criteria);
+        IGenericQuery<TEntity> OrderBy<TKey>(Expression<Func<TEntity, TKey>> keySelector, bool isAscendingOrder = true);
+        IGenericQuery<TEntity> Page(int pageSize, int pageNumber);
         Task<IEnumerable<TEntity>> ExecuteQueryAsync();
     }
 }

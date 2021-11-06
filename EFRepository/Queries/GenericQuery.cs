@@ -11,7 +11,7 @@ namespace EFInfrastructure.Queries
     public class GenericQuery<T> : IGenericQuery<T> where T : class
     {
         protected SeznamkaDbContext _context;
-        protected IQueryable<T> CurrentQueryResult { get; set; }
+        protected IQueryable<T> CurrentQueryResult;
 
         protected GenericQuery(SeznamkaDbContext context)
         {
@@ -30,7 +30,16 @@ namespace EFInfrastructure.Queries
             return await CurrentQueryResult?.ToListAsync() ?? new List<T>();
         }
 
-        public void OrderBy<TKey>(Expression<Func<T, TKey>> keySelector, bool isAscendingOrder = true)
+        //todo test if all this works
+
+        public IGenericQuery<T> Where(Expression<Func<T, bool>> criteria)       
+        {
+            CurrentQueryResult = CurrentQueryResult.Where(criteria);
+
+            return this;
+        }
+
+        public IGenericQuery<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector, bool isAscendingOrder = true)
         {
             if (isAscendingOrder)
             {
@@ -40,12 +49,16 @@ namespace EFInfrastructure.Queries
             {
                 CurrentQueryResult.OrderByDescending(keySelector);
             }
+
+            return this;
         }
 
-        public void Page(int pageSize, int pageNumber)  //pages are numbered from 1
+        public IGenericQuery<T> Page(int pageSize, int pageNumber)  //pages are numbered from 1
         {
             CurrentQueryResult = CurrentQueryResult.Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize);
+
+            return this;
         }
     }
 }
