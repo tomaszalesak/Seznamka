@@ -25,7 +25,7 @@ namespace EFInfrastructure.Queries
             CurrentQueryResult = _context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> ExecuteQueryAsync()
+        public async Task<IEnumerable<T>> ExecuteQueryAsync()   //todo check query content, consider adding reset to default after exec
         {
             return await CurrentQueryResult?.ToListAsync() ?? new List<T>();
         }

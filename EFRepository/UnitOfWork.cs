@@ -1,6 +1,8 @@
 ﻿using Domain.Interfaces;
 using Domain.Interfaces.QueryInterfaces;
 using Domain.Interfaces.RepositoryInterfaces;
+using EFInfrastructure.Queries;
+using EFInfrastructure.Repositories;
 using System;
 using System.Threading.Tasks;
 
@@ -27,6 +29,31 @@ namespace EFInfrastructure
         public IUserPhotoQuery UserPhotoQuery { get; }
         public IUserQuery UserQuery { get; }
 
+
+        public UnitOfWork(SeznamkaDbContext context)
+        {
+            _context = context;
+
+            FriendshipRepository = new FriendshipRepository(context);
+            ChatRepository = new ChatRepository(context);
+            MessageRepository = new MessageRepository(context);
+            PreferencesRepository = new PreferencesRepository(context);
+            UserPhotoRepository = new UserPhotoRepository(context);
+            UserRepository = new UserRepository(context);
+
+            FriendshipQuery = new FriendshipQuery(context);
+            ChatQuery = new ChatQuery(context);
+            MessageQuery = new MessageQuery(context);
+            PreferencesQuery = new PreferencesQuery(context);
+            UserPhotoQuery = new UserPhotoQuery(context);
+            UserQuery = new UserQuery(context);
+        }
+
+        public UnitOfWork() : this(new SeznamkaDbContext())
+        {
+
+        }
+
         //todo add queries to constructor, condense input into objects
         public UnitOfWork
         (
@@ -36,16 +63,30 @@ namespace EFInfrastructure
             IMessageRepository messageRepo,
             IPreferencesRepository preferencesRepo,
             IUserPhotoRepository userPhotoRepo,
-            IUserRepository userRepo
+            IUserRepository userRepo,
+            IFriendshipQuery friendshipQuery,
+            IChatQuery chatQuery,
+            IMessageQuery messageQuery,
+            IPreferencesQuery preferencesQuery,
+            IUserPhotoQuery userPhotoQuery,
+            IUserQuery userQuery
         )
         {
             _context = context;
+
             FriendshipRepository = friendshipRepo;
             ChatRepository = chatRepo;
             MessageRepository = messageRepo;
             PreferencesRepository = preferencesRepo;
             UserPhotoRepository = userPhotoRepo;
             UserRepository = userRepo;
+
+            FriendshipQuery = friendshipQuery;
+            ChatQuery = chatQuery;
+            MessageQuery = messageQuery;
+            PreferencesQuery = preferencesQuery;
+            UserPhotoQuery = userPhotoQuery;
+            UserQuery = userQuery;
         }
 
         public void SaveChanges()
