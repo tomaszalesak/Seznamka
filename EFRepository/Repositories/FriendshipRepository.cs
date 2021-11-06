@@ -7,6 +7,7 @@ namespace EFInfrastructure.Repositories
     {
         public FriendshipRepository(SeznamkaDbContext context) : base(context)
         {
+
         }
     }
 }
