@@ -10,9 +10,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\" />
-    <Folder Include="Facades\" />
-    <Folder Include="QueryObjects\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
