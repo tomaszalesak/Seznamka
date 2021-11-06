@@ -29,7 +29,7 @@ namespace EFInfrastructure.Queries
             }
         }
 
-        public void Page(int pageSize, int pageNumber)
+        public void Page(int pageSize, int pageNumber)  //pages are numbered from 1
         {
             CurrentResult = CurrentResult.Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize);
