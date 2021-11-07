@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain.Repositories.Base;
+using Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories.Base
@@ -45,11 +45,6 @@ namespace Infrastructure.Persistence.Repositories.Base
         public void Update(T entity)
         {
             _table.Update(entity);
-        }
-
-        public async void SaveAsync()
-        {
-            await _seznamkaDbContext.SaveChangesAsync();
         }
     }
 }

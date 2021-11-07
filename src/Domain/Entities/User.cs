@@ -14,6 +14,12 @@ namespace Domain.Entities
         [Required]
         [MaxLength(20)]
         public string Surname { get; set; }
+        
+        [Required]
+        public string Username { get; set; }
+        
+        [Required]
+        public string PasswordHash { get; set; }
 
         [Required]
         public DateTime Birthdate { get; set; }
