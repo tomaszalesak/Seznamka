@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    class UserPreviewDto
+    public class UserPreviewDto
     {
         public string Name { get; set; }
         public string Surname { get; set; }

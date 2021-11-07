@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence.Queries
         }
         public IUserQuery FilterByName(string name)
         {
-            CurrentQueryResult = CurrentQueryResult.Where(user => user.Name == name);
+            CurrentQueryResult = CurrentQueryResult.Where(user => user.Username == name);
             return this;
         }
 

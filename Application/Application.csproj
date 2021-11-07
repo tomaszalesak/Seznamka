@@ -10,10 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Facades" />
+    <ProjectReference Include="..\src\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
