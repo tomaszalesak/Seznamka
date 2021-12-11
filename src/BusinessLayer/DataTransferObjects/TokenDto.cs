@@ -1,0 +1,6 @@
+﻿namespace BusinessLayer.DataTransferObjects;
+
+public class TokenDto
+{
+    public string Token { get; set; }
+}
