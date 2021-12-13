@@ -14,6 +14,7 @@ type ChipData = {
 
 // GET
 // api/find?[age=false][age=false][age=false]
+// create UserDto type
 
 const Find = () => {
   const loggedInUser = useUser();
