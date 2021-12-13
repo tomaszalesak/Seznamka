@@ -12,6 +12,9 @@ type ChipData = {
   used: boolean;
 };
 
+// GET
+// api/find?[age=false][age=false][age=false]
+
 const Find = () => {
   const loggedInUser = useUser();
   const [users, setUsers] = useState<UserWithId[]>([]);
