@@ -50,4 +50,11 @@ public class UserFacade : FacadeBase, IUserFacade
 
         return token;
     }
+
+    public IList<UserDto> GetAllPossiblePartners(string username)
+    {
+        var user = _userService.GetUserByUsername(username);
+        
+        return _userService.GetAllUsers().ToList();
+    }
 }

@@ -14,7 +14,13 @@ namespace BusinessLayer.QueryObjects
             query = string.IsNullOrWhiteSpace(filter.Username) 
                 ? query 
                 : ((UserQuery) query)?.FilterByUsername(filter.Username);
+
+            query = ((UserQuery) query)?.FilterByAge(filter.Preferences.MinAge, filter.Preferences.MaxAge);
             
+            query = ((UserQuery) query)?.FilterByHeight(filter.Preferences.MinHeight, filter.Preferences.MaxHeight);
+            
+            query = ((UserQuery) query)?.FilterByWeight(filter.Preferences.MinWeight, filter.Preferences.MaxWeight);
+
             return query;
         }
     }

@@ -5,4 +5,5 @@ namespace BusinessLayer.Facades.FacadeInterfaces;
 public interface IUserFacade : IDisposable
 {
     Task<string> RegisterAsync(UserRegistrationDto userRegistrationDto);
+    IList<UserDto> GetAllPossiblePartners(string username);
 }

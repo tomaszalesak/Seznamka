@@ -61,16 +61,13 @@ public class UserController : ControllerBase
         return Ok(await _userFacade.RegisterAsync(userDto));
     }
 
-    [HttpGet("{username}")]
-    public async Task<ActionResult<UserDto>> GetProfileByUsername(string username)
+    [HttpGet("find")]
+    public ActionResult<UserDto> GetAllPossiblePartners()
     {
-        return Ok();
-    }
-    
-    [HttpPut]
-    public async Task<ActionResult<UserDto>> ChangeProfileByUsername(UserDto userDto)
-    {
-        
-        return Ok();
+        if (_httpContextAccessor.HttpContext == null) return BadRequest();
+        var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        var possiblePartners = _userFacade.GetAllPossiblePartners(jwtUsername);
+        return Ok(possiblePartners);
+
     }
 }
