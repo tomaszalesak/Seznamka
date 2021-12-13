@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
 
-public sealed class SeznamkaDbContext : DbContext
+public class SeznamkaDbContext : DbContext
 {
     public SeznamkaDbContext()
     {

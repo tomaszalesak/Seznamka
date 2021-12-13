@@ -14,6 +14,12 @@ public class UserQuery : QueryBase<User>
         Queryable = Queryable.Where(u => u.Username == username);
         return this;
     }
+    
+    public UserQuery FilterOmitByUsername(string usernameToOmit)
+    {
+        Queryable = Queryable.Where(u => u.Username != usernameToOmit);
+        return this;
+    }
 
     public UserQuery FilterByAge(int min, int max)
     {

@@ -20,6 +20,13 @@ public class UserController : ControllerBase
         _httpContextAccessor = httpContextAccessor;
     }
 
+    [HttpPost("login")]
+    [AllowAnonymous]
+    public async Task<ActionResult> Login([FromBody] UserLoginDto user)
+    {
+        return Ok(await _userFacade.LoginAsync(user));
+    }
+    
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<ActionResult> Register([FromForm] UserRegistrationModel user)
@@ -61,12 +68,13 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("find")]
-    public ActionResult<UserDto> GetAllPossiblePartners([FromQuery(Name = "age")] bool age,
-        [FromQuery(Name = "height")] bool height, [FromQuery(Name = "weight")] bool weight)
+    public ActionResult<UserDto> GetAllPossiblePartners([FromQuery(Name = "age")] bool age = false,
+        [FromQuery(Name = "height")] bool height = false, [FromQuery(Name = "weight")] bool weight = false,
+        [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "pageSize")] int pageSize = 10)
     {
-        if (_httpContextAccessor.HttpContext == null) return BadRequest();
+        if (_httpContextAccessor.HttpContext == null) return Forbid();
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-        var possiblePartners = _userFacade.GetAllPossiblePartners(jwtUsername);
+        var possiblePartners = _userFacade.GetAllPossiblePartners(jwtUsername, page, age, height, weight, pageSize);
         return Ok(possiblePartners);
     }
 }

@@ -3,25 +3,32 @@ using BusinessLayer.DataTransferObjects.Filters;
 using Domain.Entities;
 using Infrastructure.Persistence.Query;
 
-namespace BusinessLayer.QueryObjects
+namespace BusinessLayer.QueryObjects;
+
+public class UserQueryObject : QueryObjectBase<User, UserDto, UserFilterDto, IQuery<User>>
 {
-    public class UserQueryObject : QueryObjectBase<User, UserDto, UserFilterDto, IQuery<User>>
+    public UserQueryObject(IQuery<User> query) : base(query)
     {
-        public UserQueryObject(IQuery<User> query) : base(query) { }
+    }
 
-        public override IQuery<User> ApplyFilter(IQuery<User> query, UserFilterDto filter)
-        {
-            query = string.IsNullOrWhiteSpace(filter.Username) 
-                ? query 
-                : ((UserQuery) query)?.FilterByUsername(filter.Username);
+    public override IQuery<User> ApplyFilter(IQuery<User> query, UserFilterDto filter)
+    {
+        query = string.IsNullOrWhiteSpace(filter.Username)
+            ? query
+            : ((UserQuery)query)?.FilterByUsername(filter.Username);
 
-            query = ((UserQuery) query)?.FilterByAge(filter.Preferences.MinAge, filter.Preferences.MaxAge);
-            
-            query = ((UserQuery) query)?.FilterByHeight(filter.Preferences.MinHeight, filter.Preferences.MaxHeight);
-            
-            query = ((UserQuery) query)?.FilterByWeight(filter.Preferences.MinWeight, filter.Preferences.MaxWeight);
+        if (filter.Age != null) query = ((UserQuery)query)?.FilterByAge(filter.Age.MinAge, filter.Age.MaxAge);
 
-            return query;
-        }
+        if (filter.Height != null)
+            query = ((UserQuery)query)?.FilterByHeight(filter.Height.MinHeight, filter.Height.MaxHeight);
+
+        if (filter.Weight != null)
+            query = ((UserQuery)query)?.FilterByWeight(filter.Weight.MinWeight, filter.Weight.MaxWeight);
+
+        query = string.IsNullOrWhiteSpace(filter.OmitUserByUsername)
+            ? query
+            : ((UserQuery)query)?.FilterOmitByUsername(filter.OmitUserByUsername);
+
+        return query;
     }
 }

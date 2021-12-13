@@ -32,9 +32,21 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UserFilterDto>, I
         return user.Items?.FirstOrDefault();
     }
 
-    public IEnumerable<UserDto> GetAllUsers()
+    public IEnumerable<UserDto>  GetAllUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight, UserHeightFilterDto height, int pageSize, int requestedPage)
     {
-        return QueryObject.ExecuteQuery(new UserFilterDto()).Items.ToList();
+        // var users = Repository.GetAll().ToList();
+        // var userDtos = Mapper.Map<IList<UserDto>>(users);
+        // return userDtos;
+        return QueryObject.ExecuteQuery(new UserFilterDto
+        {
+            // PageSize = pageSize,
+            // RequestedPage = requestedPage,
+            // OmitUserByUsername = userToOmit,
+            // Age = age,
+            // Height = height,
+            // Weight = weight,
+        
+        }).Items.ToList();
     }
 
     public bool UsernameAlreadyExists(string username)
