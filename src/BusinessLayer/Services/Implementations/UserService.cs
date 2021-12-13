@@ -39,6 +39,7 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UserFilterDto>, I
         // return userDtos;
         return QueryObject.ExecuteQuery(new UserFilterDto
         {
+            OmitUserByUsername = userToOmit
             // PageSize = pageSize,
             // RequestedPage = requestedPage,
             // OmitUserByUsername = userToOmit,

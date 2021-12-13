@@ -22,9 +22,9 @@ public class UserController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult> Login([FromBody] UserLoginDto user)
+    public ActionResult Login([FromBody] UserLoginDto user)
     {
-        return Ok(await _userFacade.LoginAsync(user));
+        return Ok(_userFacade.LoginAsync(user));
     }
     
     [HttpPost("register")]

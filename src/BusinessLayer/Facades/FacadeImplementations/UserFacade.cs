@@ -52,7 +52,7 @@ public class UserFacade : FacadeBase, IUserFacade
         return token;
     }
 
-    public async Task<string> LoginAsync(UserLoginDto userLoginDto)
+    public string LoginAsync(UserLoginDto userLoginDto)
     {
         if (userLoginDto == null) throw new ArgumentException("User login data can't be null.");
         if (userLoginDto.Password == null) throw new ArgumentException("User password can't be null.");

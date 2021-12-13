@@ -17,14 +17,14 @@ public class UserQueryObject : QueryObjectBase<User, UserDto, UserFilterDto, IQu
             ? query
             : ((UserQuery)query)?.FilterByUsername(filter.Username);
 
-        if (filter.Age != null) query = ((UserQuery)query)?.FilterByAge(filter.Age.MinAge, filter.Age.MaxAge);
-
-        if (filter.Height != null)
-            query = ((UserQuery)query)?.FilterByHeight(filter.Height.MinHeight, filter.Height.MaxHeight);
-
-        if (filter.Weight != null)
-            query = ((UserQuery)query)?.FilterByWeight(filter.Weight.MinWeight, filter.Weight.MaxWeight);
-
+        // if (filter.Age != null) query = ((UserQuery)query)?.FilterByAge(filter.Age.MinAge, filter.Age.MaxAge);
+        //
+        // if (filter.Height != null)
+        //     query = ((UserQuery)query)?.FilterByHeight(filter.Height.MinHeight, filter.Height.MaxHeight);
+        //
+        // if (filter.Weight != null)
+        //     query = ((UserQuery)query)?.FilterByWeight(filter.Weight.MinWeight, filter.Weight.MaxWeight);
+        //
         query = string.IsNullOrWhiteSpace(filter.OmitUserByUsername)
             ? query
             : ((UserQuery)query)?.FilterOmitByUsername(filter.OmitUserByUsername);
