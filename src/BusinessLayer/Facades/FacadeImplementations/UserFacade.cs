@@ -55,6 +55,7 @@ public class UserFacade : FacadeBase, IUserFacade
     {
         var user = _userService.GetUserByUsername(username);
         
+        
         return _userService.GetAllUsers().ToList();
     }
 }

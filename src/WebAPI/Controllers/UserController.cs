@@ -3,7 +3,6 @@ using BusinessLayer.DataTransferObjects;
 using BusinessLayer.Facades.FacadeInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 
 namespace WebAPI.Controllers;
 
@@ -12,8 +11,8 @@ namespace WebAPI.Controllers;
 [Authorize]
 public class UserController : ControllerBase
 {
-    private readonly IUserFacade _userFacade;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserFacade _userFacade;
 
     public UserController(IUserFacade userFacade, IHttpContextAccessor httpContextAccessor)
     {
@@ -51,9 +50,9 @@ public class UserController : ControllerBase
         };
 
         var form = Request.Form;
-        
+
         if (!form.Any()) return Ok(await _userFacade.RegisterAsync(userDto));
-        
+
         await using var stream = new MemoryStream();
         await form.Files[0].CopyToAsync(stream);
         userDto.Photo = stream.ToArray();
@@ -62,12 +61,12 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("find")]
-    public ActionResult<UserDto> GetAllPossiblePartners()
+    public ActionResult<UserDto> GetAllPossiblePartners([FromQuery(Name = "age")] bool age,
+        [FromQuery(Name = "height")] bool height, [FromQuery(Name = "weight")] bool weight)
     {
         if (_httpContextAccessor.HttpContext == null) return BadRequest();
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         var possiblePartners = _userFacade.GetAllPossiblePartners(jwtUsername);
         return Ok(possiblePartners);
-
     }
 }

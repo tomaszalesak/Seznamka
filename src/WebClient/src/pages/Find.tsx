@@ -13,7 +13,7 @@ type ChipData = {
 };
 
 // GET
-// api/find?[age=false][age=false][age=false]
+// https://localhost:7298/api/User/find?age=true&height=true&weight=false
 // create UserDto type
 
 const Find = () => {
