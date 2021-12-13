@@ -27,6 +27,7 @@ services.AddApiVersioning(options =>
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = ApiVersion.Default;
 });
+services.AddHttpContextAccessor();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddAutofac();
@@ -36,12 +37,10 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,
         ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+        ClockSkew = TimeSpan.FromSeconds(30)
     };
 });
 
@@ -51,6 +50,10 @@ await using var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 if (app.Environment.IsDevelopment())
 {

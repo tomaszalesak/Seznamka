@@ -2,7 +2,6 @@
 using Autofac;
 using BusinessLayer.DataTransferObjects;
 using BusinessLayer.DataTransferObjects.Filters;
-using BusinessLayer.DataTransferObjects.QueryDtos;
 using BusinessLayer.QueryObjects;
 using Domain.Entities;
 using Infrastructure;
@@ -54,9 +53,9 @@ namespace BusinessLayer
             //     .As<QueryObjectBase<Challenge, ChallengeDto, ChallengeFilterDto, IQuery<Challenge>>>()
             //     .InstancePerDependency();
             //
-            // builder.RegisterType<UserQuery>()
-            //     .As<IQuery<User>>()
-            //     .InstancePerDependency();
+            builder.RegisterType<UserQuery>()
+                .As<IQuery<User>>()
+                .InstancePerDependency();
             //
             // builder.RegisterType<ReviewQuery>()
             //     .As<IQuery<Review>>()

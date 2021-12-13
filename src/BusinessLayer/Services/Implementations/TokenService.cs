@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BusinessLayer.DataTransferObjects;
 using BusinessLayer.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
@@ -10,11 +9,11 @@ namespace BusinessLayer.Services.Implementations;
 public class TokenService : ITokenService
 {
     private readonly TimeSpan _expiryDuration = new(0, 30, 0);
-    public string BuildToken(string key, string issuer, UserDto user)
+    public string BuildToken(string key, string issuer, string username)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Name, username),
             new Claim(ClaimTypes.NameIdentifier,
                 Guid.NewGuid().ToString())
         };

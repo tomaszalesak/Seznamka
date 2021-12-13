@@ -1,21 +1,24 @@
 ﻿using BusinessLayer.DataTransferObjects;
 using BusinessLayer.Facades.FacadeInterfaces;
 using BusinessLayer.Services.Interfaces;
-using Domain.Enums;
+using BusinessLayer.Utils;
 using Infrastructure.Persistence.UnitOfWork;
 
 namespace BusinessLayer.Facades.FacadeImplementations;
 
 public class UserFacade : FacadeBase, IUserFacade
 {
+    private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
 
-    public UserFacade(IUnitOfWorkProvider provider, IUserService userService) : base(provider)
+    public UserFacade(IUnitOfWorkProvider provider, IUserService userService, ITokenService tokenService) :
+        base(provider)
     {
         _userService = userService;
+        _tokenService = tokenService;
     }
 
-    public async Task<TokenDto> RegisterAsync(UserRegistrationDto userRegistrationDto)
+    public async Task<string> RegisterAsync(UserRegistrationDto userRegistrationDto)
     {
         if (userRegistrationDto == null) throw new ArgumentException("User data can't be null.");
 
@@ -29,27 +32,22 @@ public class UserFacade : FacadeBase, IUserFacade
                 Name = userRegistrationDto.Name,
                 Surname = userRegistrationDto.Surname,
                 Username = userRegistrationDto.Username,
-                PasswordHash = null,
-                Birthdate = default,
-                Gender = Gender.Male,
-                Height = 0,
-                Weight = 0,
-                Bio = null,
-                Longitude = 0,
-                Latitude = 0,
-                Chats = null,
-                BlockedUsers = null,
-                Friendships = null,
-                Preferences = null,
-                Photos = null
+                PasswordHash = Hashing.Encode(userRegistrationDto.Password),
+                Birthdate = userRegistrationDto.Birthdate,
+                Gender = userRegistrationDto.Gender,
+                Height = userRegistrationDto.Height,
+                Weight = userRegistrationDto.Weight,
+                Bio = userRegistrationDto.Bio,
+                Longitude = userRegistrationDto.Longitude,
+                Latitude = userRegistrationDto.Latitude,
+                Preferences = userRegistrationDto.Preferences
             });
 
             await uow.CommitAsync();
         }
 
-        return new TokenDto
-        {
-            Token = "xxx"
-        };
+        var token = _tokenService.BuildToken("PUT_YOUR_JWT_SECRET_HERE", "Seznamka", userRegistrationDto.Username);
+
+        return token;
     }
 }

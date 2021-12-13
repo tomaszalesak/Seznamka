@@ -1,8 +1,9 @@
-﻿using Domain.Enums;
+﻿using BusinessLayer.DataTransferObjects;
+using Domain.Enums;
 
-namespace BusinessLayer.DataTransferObjects;
+namespace WebAPI;
 
-public class UserRegistrationDto
+public class UserRegistrationModel
 {
     public string Name { get; set; }
     
@@ -25,6 +26,8 @@ public class UserRegistrationDto
     public double Longitude { get; set; }
 
     public double Latitude { get; set; }
-    public PreferencesDto Preferences { get; set; }
-    public byte[] Photo { get; set; }
+    
+    public PreferencesDto PreferencesDto { get; set; }
+    
+    public IFormFile Photo { get; set; }
 }
