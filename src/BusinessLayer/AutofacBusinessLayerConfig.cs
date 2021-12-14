@@ -41,8 +41,16 @@ namespace BusinessLayer
                 .As<QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>>>()
                 .InstancePerDependency();
             
+            builder.RegisterType<UserPhotoQueryObject>()
+                .As<QueryObjectBase<UserPhoto, UserPhotoDto, UserPhotoFilterDto, IQuery<UserPhoto>>>()
+                .InstancePerDependency();
+            
             builder.RegisterType<UserQuery>()
                 .As<IQuery<User>>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<UserPhotoQuery>()
+                .As<IQuery<UserPhoto>>()
                 .InstancePerDependency();
         }
     }

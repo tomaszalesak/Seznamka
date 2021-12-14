@@ -10,4 +10,6 @@ public interface IUserFacade : IDisposable
 
     UsersFoundDto GetAllPossiblePartners(string usernameToOmit, int requestedPage,
         bool filterByAge, bool filterByHeight, bool filterByWeight, int pageSize);
+
+    UserPhotoDto GetProfilePhoto(string username);
 }

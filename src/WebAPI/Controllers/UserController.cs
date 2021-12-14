@@ -77,4 +77,14 @@ public class UserController : ControllerBase
         var possiblePartners = _userFacade.GetAllPossiblePartners(jwtUsername, page, age, height, weight, pageSize);
         return Ok(possiblePartners);
     }
+    
+    [HttpGet("profilePhoto")]
+    public ActionResult<UserPhotoDto> GetProfilePhoto([FromQuery(Name = "username")] string username = null)
+    {
+        if (_httpContextAccessor.HttpContext == null) return Forbid();
+        var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        username ??= jwtUsername;
+        var photo = _userFacade.GetProfilePhoto(username);
+        return Ok(photo);
+    }
 }

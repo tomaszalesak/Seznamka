@@ -11,12 +11,14 @@ public class UserFacade : FacadeBase, IUserFacade
 {
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
+    private readonly IUserPhotoService _userPhotoService;
 
-    public UserFacade(IUnitOfWorkProvider provider, IUserService userService, ITokenService tokenService) :
+    public UserFacade(IUnitOfWorkProvider provider, IUserService userService, ITokenService tokenService, IUserPhotoService userPhotoService) :
         base(provider)
     {
         _userService = userService;
         _tokenService = tokenService;
+        _userPhotoService = userPhotoService;
     }
 
     public async Task<string> RegisterAsync(UserRegistrationDto userRegistrationDto)
@@ -41,7 +43,14 @@ public class UserFacade : FacadeBase, IUserFacade
                 Bio = userRegistrationDto.Bio,
                 Longitude = userRegistrationDto.Longitude,
                 Latitude = userRegistrationDto.Latitude,
-                Preferences = userRegistrationDto.Preferences
+                Preferences = userRegistrationDto.Preferences,
+                Photos = new List<UserPhotoDto>
+                {
+                    new()
+                    {
+                        Image = userRegistrationDto.Photo
+                    }
+                }
             });
 
             await uow.CommitAsync();
@@ -95,6 +104,14 @@ public class UserFacade : FacadeBase, IUserFacade
                     MaxHeight = user.Preferences.MaxHeight
                 }
                 : null, pageSize, requestedPage);
+        }
+    }
+
+    public UserPhotoDto GetProfilePhoto(string username)
+    {
+        using (UnitOfWorkProvider.Create())
+        {
+            return _userPhotoService.GetProfilePhoto(username);
         }
     }
 }
