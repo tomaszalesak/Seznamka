@@ -40,6 +40,30 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FriendUsers",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FriendId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendUsers", x => new { x.UserId, x.FriendId });
+                    table.ForeignKey(
+                        name: "FK_FriendUsers_Users_FriendId",
+                        column: x => x.FriendId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FriendUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Chats",
                 columns: table => new
                 {
@@ -61,30 +85,6 @@ namespace Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Chats_Users_MemberTwoId",
                         column: x => x.MemberTwoId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FriendUsers",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    FriendId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FriendUsers", x => new { x.UserId, x.FriendId });
-                    table.ForeignKey(
-                        name: "FK_FriendUsers_Users_FriendId",
-                        column: x => x.FriendId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FriendUsers_Users_UserId",
-                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -165,6 +165,11 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FriendUsers_FriendId",
+                table: "FriendUsers",
+                column: "FriendId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Chats_MemberOneId",
                 table: "Chats",
                 column: "MemberOneId");
@@ -173,11 +178,6 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_Chats_MemberTwoId",
                 table: "Chats",
                 column: "MemberTwoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FriendUsers_FriendId",
-                table: "FriendUsers",
-                column: "FriendId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_AuthorId",

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SeznamkaDbContext))]
-    [Migration("20211213211529_InitialMigration")]
+    [Migration("20211214085857_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,21 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("FriendUsers");
+                });
 
             modelBuilder.Entity("Domain.Entities.Chat", b =>
                 {
@@ -50,21 +65,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("MemberTwoId");
 
                     b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Friendship", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("FriendUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
@@ -217,25 +217,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("UserPhotos");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Chat", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "MemberOne")
-                        .WithMany("Chats")
-                        .HasForeignKey("MemberOneId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "MemberTwo")
-                        .WithMany()
-                        .HasForeignKey("MemberTwoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("MemberOne");
-
-                    b.Navigation("MemberTwo");
-                });
-
             modelBuilder.Entity("Domain.Entities.Friendship", b =>
                 {
                     b.HasOne("Domain.Entities.User", "Friend")
@@ -253,6 +234,25 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Friend");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Chat", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "MemberOne")
+                        .WithMany("Chats")
+                        .HasForeignKey("MemberOneId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "MemberTwo")
+                        .WithMany()
+                        .HasForeignKey("MemberTwoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MemberOne");
+
+                    b.Navigation("MemberTwo");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>

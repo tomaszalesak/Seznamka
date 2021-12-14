@@ -1,10 +1,11 @@
 import { Grid, Chip } from '@mui/material';
 import { onSnapshot, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import FindCard from '../components/FindCard';
-import { User, usersCollection, UserWithId, usersDocument } from '../utils/firebase';
-import { useUser } from '../hooks/useLoggedInUser';
+import { usersCollection, UserWithId, usersDocument } from '../utils/firebase';
+import { User } from '../utils/types';
 
 type ChipData = {
   key: number;
@@ -13,14 +14,15 @@ type ChipData = {
 };
 
 // GET
-// https://localhost:7298/api/User/find?age=true&height=true&weight=false
+// https://localhost:7298/api/User/find?age=true&height=true&weight=false&page=3
 // create UserDto type
 
 const Find = () => {
-  const loggedInUser = useUser();
-  const [users, setUsers] = useState<UserWithId[]>([]);
+  //const loggedInUser = useUser();
+  const [users, setUsers] = useState<User[]>([]);
   const [profile, setProfile] = useState<User>();
-  const user = useUser();
+  //const user = useUser();
+  const baseURL = 'https://localhost:7298/api/User/find';
 
   const [chipData, setChipData] = useState<readonly ChipData[]>([
     { key: 0, label: 'Age', used: false },
@@ -42,74 +44,87 @@ const Find = () => {
     return age;
   };
 
-  useEffect(() => {
-    (async () => {
-      if (user?.email) {
-        const userDoc = usersDocument(user.email);
-        const uDoc = await getDoc(userDoc);
-        setProfile(uDoc.data());
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (user?.email) {
+  //       const userDoc = usersDocument(user.email);
+  //       const uDoc = await getDoc(userDoc);
+  //       setProfile(uDoc.data());
+  //     }
+  //   })();
+  // }, []);
 
-  useEffect(() => {
-    // Call onSnapshot() to listen to changes
-    const unsubscribe = onSnapshot(usersCollection, snapshot => {
-      // Access .docs property of snapshot
-      setUsers(
-        snapshot.docs
-          .filter(doc => doc.id !== loggedInUser?.email)
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-      );
-    });
-    // Don't forget to unsubscribe from listening to changes
-    return () => {
-      unsubscribe();
-    };
-  }, [loggedInUser]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const { data: response } = await axios.get('/stuff/to/fetch');
+  //       setUsers(response);
+  //     } catch (error) {
+  //       console.error(error.message);
+  //     }
+  //   }
 
-  useEffect(() => {
-    if (profile?.preferences) {
-      const unsubscribe = onSnapshot(usersCollection, snapshot => {
-        setUsers(
-          snapshot.docs
-            .filter(doc => doc.id !== loggedInUser?.email)
-            .map(doc => ({ id: doc.id, ...doc.data() }))
-        );
-        if (chipData[0].used === true) {
-          setUsers(
-            users
-              .filter(user => profile.preferences.min_age <= ageFromDateOfBirthday(user.birth))
-              .filter(user => profile.preferences.max_age >= ageFromDateOfBirthday(user.birth))
-          );
-        }
-        if (chipData[1].used === true) {
-          setUsers(
-            users
-              .filter(user => profile.preferences.min_height <= user.height)
-              .filter(user => profile.preferences.max_height >= user.height)
-          );
-        }
-        if (chipData[2].used === true) {
-          setUsers(
-            users
-              .filter(user => profile.preferences.min_weight <= user.weight)
-              .filter(user => profile.preferences.max_weight >= user.weight)
-          );
-        }
-        /*if (chipData[3].used === true) {
-          setUsers(
-            users
-              .filter(user => profile.preferences.gps_radius >= 0)
-              .filter(user => profile.preferences.gps_radius <= 100)
-          );
-        }*/
-      });
-      return () => {
-        unsubscribe();
-      };
-    }
-  }, [chipData]);
+  //   fetchData();
+  // }, []);
+
+  // useEffect(() => {
+  //   // Call onSnapshot() to listen to changes
+  //   const unsubscribe = onSnapshot(usersCollection, snapshot => {
+  //     // Access .docs property of snapshot
+  //     setUsers(
+  //       snapshot.docs
+  //         .filter(doc => doc.id !== loggedInUser?.email)
+  //         .map(doc => ({ id: doc.id, ...doc.data() }))
+  //     );
+  //   });
+  //   // Don't forget to unsubscribe from listening to changes
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [loggedInUser]);
+
+  // useEffect(() => {
+  //   if (profile?.preferences) {
+  //     const unsubscribe = onSnapshot(usersCollection, snapshot => {
+  //       setUsers(
+  //         snapshot.docs
+  //           .filter(doc => doc.id !== loggedInUser?.email)
+  //           .map(doc => ({ id: doc.id, ...doc.data() }))
+  //       );
+  //       if (chipData[0].used === true) {
+  //         setUsers(
+  //           users
+  //             .filter(user => profile.preferences.min_age <= ageFromDateOfBirthday(user.birth))
+  //             .filter(user => profile.preferences.max_age >= ageFromDateOfBirthday(user.birth))
+  //         );
+  //       }
+  //       if (chipData[1].used === true) {
+  //         setUsers(
+  //           users
+  //             .filter(user => profile.preferences.min_height <= user.height)
+  //             .filter(user => profile.preferences.max_height >= user.height)
+  //         );
+  //       }
+  //       if (chipData[2].used === true) {
+  //         setUsers(
+  //           users
+  //             .filter(user => profile.preferences.min_weight <= user.weight)
+  //             .filter(user => profile.preferences.max_weight >= user.weight)
+  //         );
+  //       }
+  //       /*if (chipData[3].used === true) {
+  //         setUsers(
+  //           users
+  //             .filter(user => profile.preferences.gps_radius >= 0)
+  //             .filter(user => profile.preferences.gps_radius <= 100)
+  //         );
+  //       }*/
+  //     });
+  //     return () => {
+  //       unsubscribe();
+  //     };
+  //   }
+  // }, [chipData]);
 
   const addtoFilter = (chipToAdd: ChipData) => () => {
     setChipData(chips =>
@@ -151,9 +166,9 @@ const Find = () => {
       </Grid>
 
       <Grid container spacing={4}>
-        {users.map((user, index) => (
+        {/* {users.map((user, index) => (
           <FindCard key={index} {...user} />
-        ))}
+        ))} */}
       </Grid>
     </>
   );
