@@ -58,11 +58,14 @@ public class UserFacade : FacadeBase, IUserFacade
         if (userLoginDto.Password == null) throw new ArgumentException("User password can't be null.");
         if (userLoginDto.UserName == null) throw new ArgumentException("User name can't be null.");
 
-        var user = _userService.GetUserByUsername(userLoginDto.UserName);
-        if (user == null) throw new Exception("User does not exist.");
+        using (UnitOfWorkProvider.Create())
+        {
+            var user = _userService.GetUserByUsername(userLoginDto.UserName);
+            if (user == null) throw new Exception("User does not exist.");
 
-        if (Hashing.Validate(userLoginDto.Password, user.PasswordHash))
-            return _tokenService.BuildToken("PUT_YOUR_JWT_SECRET_HERE", "Seznamka", user.Username);
+            if (Hashing.Validate(userLoginDto.Password, user.PasswordHash))
+                return _tokenService.BuildToken("PUT_YOUR_JWT_SECRET_HERE", "Seznamka", user.Username);
+        }
 
         throw new ArgumentException("Wrong password.");
     }

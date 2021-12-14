@@ -2,9 +2,8 @@
 
 namespace BusinessLayer.DataTransferObjects.Filters;
 
-public class UserFilterDto : FilterDtoBase
+public class FindUserFilterDto : FilterDtoBase
 {
-    public string Username { get; set; }
     public string OmitUserByUsername { get; set; }
     public UserAgeFilterDto Age { get; set; }
     public UserHeightFilterDto Height { get; set; }

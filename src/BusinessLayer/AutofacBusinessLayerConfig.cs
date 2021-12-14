@@ -33,8 +33,12 @@ namespace BusinessLayer
                 .As(typeof(IQueryObjectBase<,,>))
                 .InstancePerDependency();
             
-            builder.RegisterType<UserQueryObject>()
-                .As<QueryObjectBase<User, UserDto, UserFilterDto, IQuery<User>>>()
+            builder.RegisterType<UsernameUserQueryObject>()
+                .As<QueryObjectBase<User, UserDto, UsernameUserFilterDto, IQuery<User>>>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<FindUserQueryObject>()
+                .As<QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>>>()
                 .InstancePerDependency();
             
             builder.RegisterType<UserQuery>()

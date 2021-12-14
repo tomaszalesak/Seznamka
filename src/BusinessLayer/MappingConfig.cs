@@ -15,6 +15,7 @@ public static class MappingConfig
         config.CreateMap<Preferences, PreferencesDto>().ReverseMap();
         config.CreateMap<User, UserDto>().ReverseMap();
         config.CreateMap<User, UserRegistrationDto>().ReverseMap();
-        config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, UserFilterDto>>().ReverseMap();
+        config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, UsernameUserFilterDto>>().ReverseMap();
+        config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, FindUserFilterDto>>().ReverseMap();
     }
 }
