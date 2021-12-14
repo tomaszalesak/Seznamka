@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 import { deleteDoc, getDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
-import { useUser } from '../hooks/useLoggedInUser';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 import {
   chatsDocument,
   User,
@@ -76,83 +76,83 @@ const itemData = [
 
 const Profile = () => {
   const { profileId } = useParams();
-  const user = useUser();
+  //const useLogginUser = useLogginUser();
 
   const [profile, setProfile] = useState<User>();
   const [blocked, setBlocked] = useState<boolean>();
   const [follow, setFollow] = useState<boolean>();
 
-  useEffect(() => {
-    const getProfile = async () => {
-      if (profileId && user?.email) {
-        const followDoc = await getDoc(userFollowDocument(user?.email, profileId));
-        const blockedDoc = await getDoc(userBlockedDocument(profileId, user?.email));
-        if (followDoc.exists()) {
-          setFollow(true);
-        }
-        if (blockedDoc.exists()) {
-          setBlocked(true);
-        }
-      }
-      if (profileId || user?.email) {
-        let userDoc;
-        if (profileId) {
-          userDoc = usersDocument(profileId);
-        } else if (user?.email) {
-          userDoc = usersDocument(user.email);
-        } else {
-          return;
-        }
-        userDoc = await getDoc(userDoc);
-        if (userDoc.exists()) {
-          setProfile(userDoc.data());
-        } else {
-          console.log('No such document!');
-        }
-      }
-    };
-    getProfile();
-  }, [user, profileId]);
+  // useEffect(() => {
+  //   const getProfile = async () => {
+  //     if (profileId && user?.email) {
+  //       const followDoc = await getDoc(userFollowDocument(user?.email, profileId));
+  //       const blockedDoc = await getDoc(userBlockedDocument(profileId, user?.email));
+  //       if (followDoc.exists()) {
+  //         setFollow(true);
+  //       }
+  //       if (blockedDoc.exists()) {
+  //         setBlocked(true);
+  //       }
+  //     }
+  //     if (profileId || user?.email) {
+  //       let userDoc;
+  //       if (profileId) {
+  //         userDoc = usersDocument(profileId);
+  //       } else if (user?.email) {
+  //         userDoc = usersDocument(user.email);
+  //       } else {
+  //         return;
+  //       }
+  //       userDoc = await getDoc(userDoc);
+  //       if (userDoc.exists()) {
+  //         setProfile(userDoc.data());
+  //       } else {
+  //         console.log('No such document!');
+  //       }
+  //     }
+  //   };
+  //   getProfile();
+  // }, [user, profileId]);
 
-  const followHandler = async () => {
-    if (user?.email && profileId) {
-      await setDoc(userFollowDocument(user?.email, profileId), {
-        email: profileId,
-        first_name: profile?.first_name,
-        last_name: profile?.last_name
-      });
+  // const followHandler = async () => {
+  //   if (user?.email && profileId) {
+  //     await setDoc(userFollowDocument(user?.email, profileId), {
+  //       email: profileId,
+  //       first_name: profile?.first_name,
+  //       last_name: profile?.last_name
+  //     });
 
-      const q1 = await getDoc(chatsDocument(`${user?.email}${profileId}`));
-      const q2 = await getDoc(chatsDocument(`${profileId}${user?.email}`));
-      if (!q1.exists() && !q2.exists())
-        await setDoc(chatsDocument(`${user?.email}${profileId}`), {
-          user1: user?.email,
-          user2: profileId
-        });
-      setFollow(true);
-    }
-  };
+  //     const q1 = await getDoc(chatsDocument(`${user?.email}${profileId}`));
+  //     const q2 = await getDoc(chatsDocument(`${profileId}${user?.email}`));
+  //     if (!q1.exists() && !q2.exists())
+  //       await setDoc(chatsDocument(`${user?.email}${profileId}`), {
+  //         user1: user?.email,
+  //         user2: profileId
+  //       });
+  //     setFollow(true);
+  //   }
+  // };
 
-  const blockHandler = async () => {
-    if (user?.email && profileId) {
-      await setDoc(userBlockedDocument(profileId, user?.email), {
-        email: profileId,
-        first_name: profile?.first_name,
-        last_name: profile?.last_name
-      });
+  // const blockHandler = async () => {
+  //   if (user?.email && profileId) {
+  //     await setDoc(userBlockedDocument(profileId, user?.email), {
+  //       email: profileId,
+  //       first_name: profile?.first_name,
+  //       last_name: profile?.last_name
+  //     });
 
-      const q1 = await getDoc(chatsDocument(`${user?.email}${profileId}`));
-      const q2 = await getDoc(chatsDocument(`${profileId}${user?.email}`));
-      if (q1.exists()) {
-        await deleteDoc(chatsDocument(`${user?.email}${profileId}`));
-      }
-      if (q2.exists()) {
-        await deleteDoc(chatsDocument(`${profileId}${user?.email}`));
-      }
+  //     const q1 = await getDoc(chatsDocument(`${user?.email}${profileId}`));
+  //     const q2 = await getDoc(chatsDocument(`${profileId}${user?.email}`));
+  //     if (q1.exists()) {
+  //       await deleteDoc(chatsDocument(`${user?.email}${profileId}`));
+  //     }
+  //     if (q2.exists()) {
+  //       await deleteDoc(chatsDocument(`${profileId}${user?.email}`));
+  //     }
 
-      setBlocked(true);
-    }
-  };
+  //     setBlocked(true);
+  //   }
+  // };
 
   const photo = useProfilePicture(profile?.photo);
 
@@ -164,16 +164,14 @@ const Profile = () => {
             {profileId ? (
               <>
                 {!follow ? (
-                  <Button size="small" onClick={followHandler}>
-                    Follow
-                  </Button>
+                  /*<Button size="small" onClick={followHandler}>*/
+                  <Button size="small">Follow</Button>
                 ) : (
                   ''
                 )}
                 {!blocked ? (
-                  <Button size="small" onClick={blockHandler}>
-                    Block
-                  </Button>
+                  /*<Button size="small" onClick={blockHandler}>*/
+                  <Button size="small">Block</Button>
                 ) : (
                   ''
                 )}

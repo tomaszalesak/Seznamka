@@ -14,17 +14,16 @@ import {
 import { Add } from '@mui/icons-material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setDoc } from 'firebase/firestore';
-import { ref, uploadString } from 'firebase/storage';
-import { v1 as uuidv1 } from 'uuid';
+import axios, { Method } from 'axios';
 
-import { signUp, usersDocument, storage } from '../utils/firebase';
 import useField from '../hooks/useField';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [_logUser, setLogUser] = useLogginUser();
 
   const [email, usernameProps] = useField('email', true);
   const [password, passwordProps] = useField('password', true);
@@ -61,6 +60,11 @@ const Register = () => {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    console.log(picture);
+    console.log(imgData);
+  }, [picture, imgData]);
 
   const handleHeight = (_event: Event, newValue: number | number[]) => {
     setHeightVal(newValue as number[]);
@@ -131,34 +135,48 @@ const Register = () => {
         onSubmit={async (e: FormEvent) => {
           e.preventDefault();
           try {
-            const id = uuidv1();
-            await setDoc(usersDocument(email), {
-              first_name: firstname,
-              last_name: lastname,
-              birth: birth.toJSON().slice(0, 10).split('-').reverse().join('.'),
-              bio,
-              gender,
-              height: +height,
-              weight: +weight,
-              photo: `${id}.jpg`,
-              preferences: {
-                min_age: ageVal[0],
-                max_age: ageVal[1] as number,
-                gps_radius: gpsVal,
-                min_height: heightVal[0],
-                max_height: heightVal[1],
-                min_weight: weightVal[0],
-                max_weight: weightVal[1]
-              }
-              //follow: [],
-              //blocked: []
-            });
-            if (picture?.name) {
-              const storageRef = ref(storage, `images/${id}.jpg`);
-              await uploadString(storageRef, imgData as string, 'data_url');
+            console.log(`${birth.getDate()}-${birth.getMonth() + 1}-${birth.getFullYear()}`);
+
+            if (picture) {
+              const data = new FormData();
+              data.append('Gender', gender);
+              data.append('PreferencesDto.MaxAge', ageVal[1].toString());
+              data.append('PreferencesDto.MinWeight', weightVal[0].toString());
+              data.append('PreferencesDto.MaxHeight', heightVal[1].toString());
+              data.append('Height', height);
+              data.append('Bio', bio);
+              data.append('Name', firstname);
+              data.append('Latitude', '100');
+              data.append(
+                'Birthdate',
+                `${birth.getDate()}-${birth.getMonth() + 1}-${birth.getFullYear()}`
+              );
+              data.append('Longitude', '100');
+              data.append('PreferencesDto.MinHeight', heightVal[0].toString());
+              data.append('Photo', picture, picture.name);
+              data.append('PreferencesDto.MinAge', ageVal[0].toString());
+              data.append('PreferencesDto.GpsRadius', '100');
+              data.append('PreferencesDto.MaxWeight', weightVal[0].toString());
+              data.append('Username', email);
+              data.append('Weight', weight);
+              data.append('Surname', lastname);
+              data.append('Password', password);
+
+              const config = {
+                method: 'post' as Method,
+                url: 'https://localhost:7298/api/User/register',
+                headers: {
+                  accept: '*/*'
+                },
+                data
+              };
+
+              const { data: response } = await axios(config);
+              setLogUser({ jwt: response });
+              navigate('/');
+            } else {
+              throw { message: 'Picture is required' };
             }
-            await signUp(email, password);
-            navigate('/');
           } catch (err) {
             setSubmitError((err as { message?: string })?.message ?? 'Unknown error occurred');
           }

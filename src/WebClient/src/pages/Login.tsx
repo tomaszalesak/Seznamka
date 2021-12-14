@@ -2,17 +2,20 @@ import { Button, Paper, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios, { Method } from 'axios';
 
 import useField from '../hooks/useField';
-import { signIn } from '../utils/firebase';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const [_logUser, setLogUser] = useLogginUser();
   const [email, usernameProps] = useField('email', true);
   const [password, passwordProps] = useField('password', true);
 
   const [submitError, setSubmitError] = useState<string>();
+
+  const baseURL = 'https://localhost:7298/api/User/login';
 
   return (
     <div>
@@ -20,8 +23,25 @@ const Login = () => {
         component="form"
         onSubmit={async (e: FormEvent) => {
           e.preventDefault();
+
           try {
-            await signIn(email, password);
+            const data = JSON.stringify({
+              userName: email,
+              password
+            });
+
+            const config = {
+              method: 'POST' as Method,
+              url: baseURL,
+              headers: {
+                'accept': '*/*',
+                'Content-Type': 'application/json'
+              },
+              data
+            };
+            const { data: response } = await axios(config);
+            setLogUser({ jwt: response });
+            console.log(response);
             navigate('/');
           } catch (err) {
             setSubmitError((err as { message?: string })?.message ?? 'Unknown error occurred');

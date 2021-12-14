@@ -16,10 +16,9 @@ import { useEffect, useState } from 'react';
 import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
 
 import { chatMessagesCollection, chatsCollection, ChatWithEmail, Message } from '../utils/firebase';
-import { useUser } from '../hooks/useLoggedInUser';
 
 const Chats = () => {
-  const loggedInUser = useUser();
+  //const loggedInUser = useUser();
   const [selectedChat, setSelectedChat] = useState('');
 
   const [chats, setChats] = useState<ChatWithEmail[]>([]);
@@ -31,24 +30,24 @@ const Chats = () => {
     setFieldValue(event.target.value);
   };
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(chatsCollection, snapshot => {
-      const result = snapshot.docs
-        .filter(
-          chat =>
-            chat.data().user1 === loggedInUser?.email || chat.data().user2 === loggedInUser?.email
-        )
-        .map(doc => {
-          const secondUser =
-            loggedInUser?.email === doc.data().user1 ? doc.data().user2 : doc.data().user1;
-          return { email: secondUser, id: doc.id, ...doc.data() };
-        });
-      setChats(result);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [loggedInUser]);
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(chatsCollection, snapshot => {
+  //     const result = snapshot.docs
+  //       .filter(
+  //         chat =>
+  //           chat.data().user1 === loggedInUser?.email || chat.data().user2 === loggedInUser?.email
+  //       )
+  //       .map(doc => {
+  //         const secondUser =
+  //           loggedInUser?.email === doc.data().user1 ? doc.data().user2 : doc.data().user1;
+  //         return { email: secondUser, id: doc.id, ...doc.data() };
+  //       });
+  //     setChats(result);
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [loggedInUser]);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -69,16 +68,16 @@ const Chats = () => {
     setSelectedChat(index);
   };
 
-  const addMessage = async () => {
-    if (selectedChat !== '')
-      await addDoc(chatMessagesCollection(selectedChat), {
-        createdAt: new Date(),
-        time: new Date().toJSON().slice(0, 10).split('-').reverse().join('.'),
-        author: loggedInUser?.email,
-        message: fieldValue
-      });
-    setFieldValue('');
-  };
+  // const addMessage = async () => {
+  //   if (selectedChat !== '')
+  //     await addDoc(chatMessagesCollection(selectedChat), {
+  //       createdAt: new Date(),
+  //       time: new Date().toJSON().slice(0, 10).split('-').reverse().join('.'),
+  //       author: loggedInUser?.email,
+  //       message: fieldValue
+  //     });
+  //   setFieldValue('');
+  // };
 
   return (
     <Grid container component={Paper} spacing={2} sx={{ height: '92vh' }}>
@@ -118,16 +117,16 @@ const Chats = () => {
             <ListItem key={index}>
               <Grid container>
                 <Grid item xs={12}>
-                  <ListItemText
+                  {/* <ListItemText
                     sx={{ textAlign: loggedInUser?.email === item.author ? 'right' : 'left' }}
                     primary={item.message}
-                  />
+                  />*/}
                 </Grid>
                 <Grid item xs={12}>
-                  <ListItemText
+                  {/* <ListItemText
                     sx={{ textAlign: loggedInUser?.email === item.author ? 'right' : 'left' }}
                     secondary={item.time}
-                  />
+                  />*/}
                 </Grid>
               </Grid>
             </ListItem>
@@ -146,7 +145,7 @@ const Chats = () => {
             />
           </Grid>
           <Grid item xs={1} sx={{ textAlign: 'right' }}>
-            <Fab color="primary" aria-label="add" size="small" onClick={addMessage}>
+            <Fab color="primary" aria-label="add" size="small">
               <SendIcon />
             </Fab>
           </Grid>

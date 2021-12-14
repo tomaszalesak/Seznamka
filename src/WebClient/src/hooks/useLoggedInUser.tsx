@@ -1,31 +1,16 @@
-import {
-  createContext,
-  Dispatch,
-  FC,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState
-} from 'react';
-import { User as UserFirebase } from 'firebase/auth';
+import { createContext, Dispatch, FC, SetStateAction, useContext, useState } from 'react';
 
-import { onAuthChanged } from '../utils/firebase';
+type UserJwt = {
+  jwt: string;
+};
 
-type UserState = [UserFirebase | undefined, Dispatch<SetStateAction<UserFirebase | undefined>>];
+type UserState = [UserJwt | undefined, Dispatch<SetStateAction<UserJwt | undefined>>];
 
 const UserContext = createContext<UserState>(undefined as never);
 
 export const UserProvider: FC = ({ children }) => {
-  const userState = useState<UserFirebase>();
-
-  useEffect(() => {
-    onAuthChanged(u => userState[1](u ?? undefined));
-  }, []);
-
+  const userState = useState<UserJwt>();
   return <UserContext.Provider value={userState}>{children}</UserContext.Provider>;
 };
 
-export const useUser = () => {
-  const [user] = useContext(UserContext);
-  return user;
-};
+export const useLogginUser = () => useContext(UserContext);

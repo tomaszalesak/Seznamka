@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   AppBar,
@@ -15,8 +15,8 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { AccountCircle } from '@mui/icons-material';
 
-import { useUser } from '../hooks/useLoggedInUser';
 import { signOut } from '../utils/firebase';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const notLoginPages = [{ name: 'Home', link: '/' }];
 const loginPages = [
@@ -28,7 +28,7 @@ const loginPages = [
 
 const Layout: FC = ({ children }) => {
   const navigate = useNavigate();
-  const user = useUser();
+  const [logUser, _setLogUser] = useLogginUser();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -46,6 +46,10 @@ const Layout: FC = ({ children }) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    navigate('/');
+  }, []);
 
   return (
     <>
@@ -90,7 +94,7 @@ const Layout: FC = ({ children }) => {
                   display: { xs: 'block', md: 'none' }
                 }}
               >
-                {user
+                {logUser?.jwt
                   ? loginPages.map(page => (
                       <MenuItem
                         component={Link}
@@ -122,7 +126,7 @@ const Layout: FC = ({ children }) => {
               Dating
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {user
+              {logUser?.jwt
                 ? loginPages.map(page => (
                     <Button
                       component={Link}
@@ -147,7 +151,7 @@ const Layout: FC = ({ children }) => {
                   ))}
             </Box>
 
-            {user ? (
+            {logUser?.jwt ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
