@@ -68,7 +68,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("find")]
-    public ActionResult<UserDto> GetAllPossiblePartners([FromQuery(Name = "age")] bool age = false,
+    public ActionResult<UsersFoundDto> GetAllPossiblePartners([FromQuery(Name = "age")] bool age = false,
         [FromQuery(Name = "height")] bool height = false, [FromQuery(Name = "weight")] bool weight = false,
         [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "pageSize")] int pageSize = 10)
     {

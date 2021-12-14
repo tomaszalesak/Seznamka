@@ -8,6 +8,6 @@ namespace BusinessLayer.Services.Interfaces
         public UserDto GetUserByUsername(string username);
         public bool UsernameAlreadyExists(string username);
         Task<string> GetUsernameAsync(int userId);
-        IEnumerable<UserDto> GetAllUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight, UserHeightFilterDto height, int pageSize, int requestedPage);
+        UsersFoundDto GetAllUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight, UserHeightFilterDto height, int pageSize, int requestedPage);
     }
 }

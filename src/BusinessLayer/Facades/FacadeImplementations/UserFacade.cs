@@ -70,7 +70,7 @@ public class UserFacade : FacadeBase, IUserFacade
         throw new ArgumentException("Wrong password.");
     }
 
-    public IList<UserDto> GetAllPossiblePartners(string usernameToOmit, int requestedPage,
+    public UsersFoundDto GetAllPossiblePartners(string usernameToOmit, int requestedPage,
         bool filterByAge, bool filterByHeight, bool filterByWeight, int pageSize)
     {
         using (UnitOfWorkProvider.Create())
@@ -94,7 +94,7 @@ public class UserFacade : FacadeBase, IUserFacade
                     MinHeight = user.Preferences.MinHeight,
                     MaxHeight = user.Preferences.MaxHeight
                 }
-                : null, pageSize, requestedPage).ToList();
+                : null, pageSize, requestedPage);
         }
     }
 }
