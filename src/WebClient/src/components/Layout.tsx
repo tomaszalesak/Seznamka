@@ -15,7 +15,6 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { AccountCircle } from '@mui/icons-material';
 
-import { signOut } from '../utils/firebase';
 import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const notLoginPages = [{ name: 'Home', link: '/' }];
@@ -28,7 +27,7 @@ const loginPages = [
 
 const Layout: FC = ({ children }) => {
   const navigate = useNavigate();
-  const [logUser, _setLogUser] = useLogginUser();
+  const [logUser, setLogUser] = useLogginUser();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -187,7 +186,7 @@ const Layout: FC = ({ children }) => {
                     key="Sign out"
                     onClick={() => {
                       handleCloseNavMenu();
-                      signOut();
+                      setLogUser({ jwt: '' });
                       navigate('/login');
                     }}
                   >

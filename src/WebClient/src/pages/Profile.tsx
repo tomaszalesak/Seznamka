@@ -76,7 +76,7 @@ const itemData = [
 
 const Profile = () => {
   const { profileId } = useParams();
-  //const useLogginUser = useLogginUser();
+  const [logUser, _setLogUser] = useLogginUser();
 
   const [profile, setProfile] = useState<User>();
   const [blocked, setBlocked] = useState<boolean>();

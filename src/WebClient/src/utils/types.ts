@@ -14,6 +14,7 @@ export type User = {
   blockedUsers?: User[];
   friendships?: string[]; //friedsihp dto neni
   references?: Preferences;
+  photo?: string[];
 };
 
 export type Preferences = {
@@ -42,3 +43,5 @@ export type Message = {
   text?: string;
   sendTime?: string; // date, zatim nevim jak
 };
+
+export type FindUsers = { users: User[]; totalNumberOfUsers: number };

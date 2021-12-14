@@ -12,16 +12,18 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useProfilePicture from '../hooks/useProfilePicture';
-import { UserWithId } from '../utils/firebase';
+import { User } from '../utils/types';
 
-const FindCard: FC<UserWithId> = ({ first_name, last_name, bio, id, photo }) => {
-  const profilePhoto = useProfilePicture(photo);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FindCard: FC<User> = ({ name, surname, username, bio, photo }) => {
+  //const profilePhoto = useProfilePicture(photo);
+  const profilePhoto = 'https://images.unsplash.com/photo-1549388604-817d15aa0110';
   const navigate = useNavigate();
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card sx={{ height: 500 }}>
-        <Button onClick={() => navigate(`/profile/${id}`)}>
-          <CardHeader title={`${first_name} ${last_name}`} />
+        <Button onClick={() => navigate(`/profile/${username}`)}>
+          <CardHeader title={`${name} ${surname}`} />
         </Button>
 
         <Box

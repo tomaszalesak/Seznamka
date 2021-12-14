@@ -10,10 +10,11 @@ import {
   usersDocument,
   userFollowCollection
 } from '../utils/firebase';
+import { FindUsers } from '../utils/types';
 
 const Following = () => {
   //const loggedInUser = useUser();
-  const [users, setUsers] = useState<UserWithId[]>([]);
+  const [findUsers, setfindUsers] = useState<FindUsers>({ users: [], totalNumberOfUsers: 1 });
   const [profile, setProfile] = useState<User>();
   // const user = useUser();
 
@@ -56,7 +57,7 @@ const Following = () => {
 
   return (
     <Grid container spacing={4}>
-      {users.map((user, index) => (
+      {findUsers.users.map((user, index) => (
         <FindCard key={index} {...user} />
       ))}
     </Grid>

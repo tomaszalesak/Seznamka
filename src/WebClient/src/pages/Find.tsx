@@ -1,11 +1,10 @@
 import { Grid, Chip } from '@mui/material';
-import { onSnapshot, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { Method } from 'axios';
 
 import FindCard from '../components/FindCard';
-import { usersCollection, UserWithId, usersDocument } from '../utils/firebase';
-import { User } from '../utils/types';
+import { FindUsers, User } from '../utils/types';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 
 type ChipData = {
   key: number;
@@ -18,17 +17,18 @@ type ChipData = {
 // create UserDto type
 
 const Find = () => {
-  //const loggedInUser = useUser();
-  const [users, setUsers] = useState<User[]>([]);
+  const [logUser, _setLogUser] = useLogginUser();
+
+  const [findUsers, setFindUsers] = useState<FindUsers>({ users: [], totalNumberOfUsers: 1 });
   const [profile, setProfile] = useState<User>();
-  //const user = useUser();
+
   const baseURL = 'https://localhost:7298/api/User/find';
 
   const [chipData, setChipData] = useState<readonly ChipData[]>([
     { key: 0, label: 'Age', used: false },
     { key: 1, label: 'Height', used: false },
-    { key: 2, label: 'Weight', used: false },
-    { key: 3, label: 'GPS radius', used: false }
+    { key: 2, label: 'Weight', used: false }
+    // { key: 3, label: 'GPS radius', used: false }
   ]);
 
   const ageFromDateOfBirthday = (dateOfBirth: string) => {
@@ -44,15 +44,34 @@ const Find = () => {
     return age;
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (user?.email) {
-  //       const userDoc = usersDocument(user.email);
-  //       const uDoc = await getDoc(userDoc);
-  //       setProfile(uDoc.data());
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (logUser?.jwt) {
+        try {
+          const config = {
+            method: 'get' as Method,
+            url: 'https://localhost:7298/api/User/find',
+            params: {
+              age: chipData[0].used,
+              height: chipData[1].used,
+              weight: chipData[2].used,
+              page: 1
+            },
+            headers: {
+              accept: 'text/plain',
+              Authorization: `Bearer ${logUser.jwt}`
+            }
+          };
+
+          const { data: response } = await axios(config);
+          setFindUsers(response);
+          console.log(response);
+        } catch (err) {
+          console.log((err as { message?: string })?.message ?? 'Unknown error occurred');
+        }
+      }
+    })();
+  }, [chipData]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -166,9 +185,9 @@ const Find = () => {
       </Grid>
 
       <Grid container spacing={4}>
-        {/* {users.map((user, index) => (
+        {findUsers.users.map((user, index) => (
           <FindCard key={index} {...user} />
-        ))} */}
+        ))}
       </Grid>
     </>
   );
