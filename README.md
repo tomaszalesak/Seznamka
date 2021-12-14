@@ -1,6 +1,6 @@
 # FI-PV179
 
-Omlouváme se, že nemáme vše k tomuto DL, ale ze začátku jsme se snažili postupovat podle Clean architecture (https://github.com/jasontaylordev/CleanArchitecture) a nějak jsme zápasili s tím jak ji implemetovat se všemy potřebnými patterny k tomuto předmětu. Do příště se budeme snažit vše dodělat.
+Seznamka : .NET 6 Web API, SPA klient v Reactu a TypeScriptu
 
 ## Zadání
 
