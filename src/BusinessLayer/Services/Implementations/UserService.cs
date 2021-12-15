@@ -10,14 +10,17 @@ namespace BusinessLayer.Services.Implementations;
 
 public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilterDto>, IUserService
 {
+    protected readonly QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>> FindCountQueryObject;
     protected readonly QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>> FindQueryObject;
 
     public UserService(IRepository<User> repository,
         QueryObjectBase<User, UserDto, UsernameUserFilterDto, IQuery<User>> userQueryObject,
-        QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>> findUserQueryObject)
+        QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>> findUserQueryObject,
+        QueryObjectBase<User, UserDto, FindUserFilterDto, IQuery<User>> findCountQueryObject)
         : base(repository, userQueryObject)
     {
         FindQueryObject = findUserQueryObject;
+        FindCountQueryObject = findCountQueryObject;
     }
 
     public async Task<string> GetUsernameAsync(int userId)
@@ -39,7 +42,7 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
     public UsersFoundDto GetAllUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight,
         UserHeightFilterDto height, int pageSize, int requestedPage)
     {
-        var result = FindQueryObject.ExecuteQuery(new FindUserFilterDto
+        var foundUsers = FindQueryObject.ExecuteQuery(new FindUserFilterDto
         {
             OmitUserByUsername = userToOmit,
             PageSize = pageSize,
@@ -48,11 +51,21 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
             Height = height,
             Weight = weight
         });
+        
+        var count = FindCountQueryObject.ExecuteQuery(new FindUserFilterDto
+        {
+            OmitUserByUsername = userToOmit,
+            PageSize = pageSize,
+            RequestedPage = null,
+            Age = age,
+            Height = height,
+            Weight = weight
+        });
 
         return new UsersFoundDto
         {
-            Users = result.Items.ToList(),
-            TotalNumberOfUsers = Repository.GetAll().Count(),
+            Users = foundUsers.Items.ToList(),
+            TotalNumberOfUsers = count.TotalItemsCount
         };
     }
 
