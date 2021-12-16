@@ -1,9 +1,10 @@
 import { Grid, Chip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios, { Method } from 'axios';
+import Pagination from '@mui/material/Pagination';
 
 import FindCard from '../components/FindCard';
-import { FindUsers, User } from '../utils/types';
+import { FindUsers } from '../utils/types';
 import { useLogginUser } from '../hooks/useLoggedInUser';
 
 type ChipData = {
@@ -20,9 +21,8 @@ const Find = () => {
   const [logUser, _setLogUser] = useLogginUser();
 
   const [findUsers, setFindUsers] = useState<FindUsers>({ users: [], totalNumberOfUsers: 1 });
-  const [profile, setProfile] = useState<User>();
-
-  const baseURL = 'https://localhost:7298/api/User/find';
+  const [page, setPage] = useState(1);
+  const [countPages, setCountPages] = useState(1);
 
   const [chipData, setChipData] = useState<readonly ChipData[]>([
     { key: 0, label: 'Age', used: false },
@@ -31,119 +31,75 @@ const Find = () => {
     // { key: 3, label: 'GPS radius', used: false }
   ]);
 
-  const ageFromDateOfBirthday = (dateOfBirth: string) => {
-    const today = new Date();
-    const birthDate = dateOfBirth.split('.');
-    let age = today.getFullYear() - (birthDate?.[2] as unknown as number);
-    const m = today.getMonth() - (birthDate?.[1] as unknown as number);
+  // const ageFromDateOfBirthday = (dateOfBirth: string) => {
+  //   const today = new Date();
+  //   const birthDate = dateOfBirth.split('.');
+  //   let age = today.getFullYear() - (birthDate?.[2] as unknown as number);
+  //   const m = today.getMonth() - (birthDate?.[1] as unknown as number);
 
-    if (m < 0 || (m === 0 && today.getDate() < (birthDate?.[0] as unknown as number))) {
-      age--;
+  //   if (m < 0 || (m === 0 && today.getDate() < (birthDate?.[0] as unknown as number))) {
+  //     age--;
+  //   }
+
+  //   return age;
+  // };
+
+  const PageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  const loadData = async () => {
+    if (logUser?.jwt) {
+      const config = {
+        method: 'get' as Method,
+        url: 'https://localhost:7298/api/User/find',
+        params: {
+          age: chipData[0].used,
+          height: chipData[1].used,
+          weight: chipData[2].used,
+          page
+        },
+        headers: {
+          accept: 'text/plain',
+          Authorization: `Bearer ${logUser.jwt}`
+        }
+      };
+
+      const { data: response } = await axios(config);
+      setFindUsers(response);
     }
+  };
 
-    return age;
+  const setPagesCount = () => {
+    let pages = Math.floor(findUsers.totalNumberOfUsers / 10);
+    pages = findUsers.totalNumberOfUsers % 10 ? pages + 1 : pages;
+    setCountPages(pages ? pages : 1);
   };
 
   useEffect(() => {
     (async () => {
-      if (logUser?.jwt) {
-        try {
-          const config = {
-            method: 'get' as Method,
-            url: 'https://localhost:7298/api/User/find',
-            params: {
-              age: chipData[0].used,
-              height: chipData[1].used,
-              weight: chipData[2].used,
-              page: 1
-            },
-            headers: {
-              accept: 'text/plain',
-              Authorization: `Bearer ${logUser.jwt}`
-            }
-          };
-
-          const { data: response } = await axios(config);
-          setFindUsers(response);
-          console.log(response);
-        } catch (err) {
-          console.log((err as { message?: string })?.message ?? 'Unknown error occurred');
-        }
+      try {
+        await loadData();
+        setPage(1);
+      } catch (err) {
+        console.log((err as { message?: string })?.message ?? 'Unknown error occurred');
       }
     })();
   }, [chipData]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const { data: response } = await axios.get('/stuff/to/fetch');
-  //       setUsers(response);
-  //     } catch (error) {
-  //       console.error(error.message);
-  //     }
-  //   }
+  useEffect(() => {
+    setPagesCount();
+  }, [findUsers.totalNumberOfUsers]);
 
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-  //   // Call onSnapshot() to listen to changes
-  //   const unsubscribe = onSnapshot(usersCollection, snapshot => {
-  //     // Access .docs property of snapshot
-  //     setUsers(
-  //       snapshot.docs
-  //         .filter(doc => doc.id !== loggedInUser?.email)
-  //         .map(doc => ({ id: doc.id, ...doc.data() }))
-  //     );
-  //   });
-  //   // Don't forget to unsubscribe from listening to changes
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [loggedInUser]);
-
-  // useEffect(() => {
-  //   if (profile?.preferences) {
-  //     const unsubscribe = onSnapshot(usersCollection, snapshot => {
-  //       setUsers(
-  //         snapshot.docs
-  //           .filter(doc => doc.id !== loggedInUser?.email)
-  //           .map(doc => ({ id: doc.id, ...doc.data() }))
-  //       );
-  //       if (chipData[0].used === true) {
-  //         setUsers(
-  //           users
-  //             .filter(user => profile.preferences.min_age <= ageFromDateOfBirthday(user.birth))
-  //             .filter(user => profile.preferences.max_age >= ageFromDateOfBirthday(user.birth))
-  //         );
-  //       }
-  //       if (chipData[1].used === true) {
-  //         setUsers(
-  //           users
-  //             .filter(user => profile.preferences.min_height <= user.height)
-  //             .filter(user => profile.preferences.max_height >= user.height)
-  //         );
-  //       }
-  //       if (chipData[2].used === true) {
-  //         setUsers(
-  //           users
-  //             .filter(user => profile.preferences.min_weight <= user.weight)
-  //             .filter(user => profile.preferences.max_weight >= user.weight)
-  //         );
-  //       }
-  //       /*if (chipData[3].used === true) {
-  //         setUsers(
-  //           users
-  //             .filter(user => profile.preferences.gps_radius >= 0)
-  //             .filter(user => profile.preferences.gps_radius <= 100)
-  //         );
-  //       }*/
-  //     });
-  //     return () => {
-  //       unsubscribe();
-  //     };
-  //   }
-  // }, [chipData]);
+  useEffect(() => {
+    (async () => {
+      try {
+        await loadData();
+      } catch (err) {
+        console.log((err as { message?: string })?.message ?? 'Unknown error occurred');
+      }
+    })();
+  }, [page]);
 
   const addtoFilter = (chipToAdd: ChipData) => () => {
     setChipData(chips =>
@@ -189,6 +145,15 @@ const Find = () => {
           <FindCard key={index} {...user} />
         ))}
       </Grid>
+      <br />
+      <br />
+      <Pagination
+        count={countPages}
+        page={page}
+        onChange={PageChange}
+        variant="outlined"
+        color="secondary"
+      />
     </>
   );
 };

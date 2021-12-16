@@ -6,7 +6,8 @@ import {
   CardHeader,
   Button,
   Grid,
-  Box
+  Box,
+  CardActionArea
 } from '@mui/material';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,21 +22,18 @@ const FindCard: FC<User> = ({ name, surname, username, bio, photo }) => {
   const navigate = useNavigate();
   return (
     <Grid item xs={12} sm={6} md={4}>
-      <Card sx={{ height: 500 }}>
-        <Button onClick={() => navigate(`/profile/${username}`)}>
-          <CardHeader title={`${name} ${surname}`} />
-        </Button>
-
-        <Box
-          sx={{
-            height: 330
-          }}
-        >
+      <Card>
+        <CardActionArea onClick={() => navigate(`/profile/${username}`)}>
           <CardMedia component="img" image={profilePhoto} alt="random" />
-        </Box>
-        <CardContent sx={{ flexGrow: 1, position: 'relative', paddingBottom: 0 }}>
-          <Typography sx={{ margin: 0, position: 'absolute', bottom: '-50%' }}>{bio}</Typography>
-        </CardContent>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {`${name} ${surname}`}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {bio}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
       </Card>
     </Grid>
   );

@@ -51,6 +51,7 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
     public UsersFoundDto GetAllPossibleUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight,
         UserHeightFilterDto height, int pageSize, int requestedPage)
     {
+        var userId = QueryObject.ExecuteQuery(new UsernameUserFilterDto { Username = userToOmit }).Items[0].Id;
         var foundUsers = FindQueryObject.ExecuteQuery(new FindUserFilterDto
         {
             OmitUserByUsername = userToOmit,
@@ -61,33 +62,26 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
             Weight = weight
         });
 
-        var count = FindCountQueryObject.ExecuteQuery(new FindUserFilterDto
+        var result = new List<UserDto>();
+        var total = 0;
+
+        foreach (var user in foundUsers.Items)
         {
-            OmitUserByUsername = userToOmit,
-            PageSize = pageSize,
-            RequestedPage = null,
-            Age = age,
-            Height = height,
-            Weight = weight
-        });
-
-        var userId = QueryObject.ExecuteQuery(new UsernameUserFilterDto { Username = userToOmit }).Items[0].Id;
-
-        var foundUsersDto = foundUsers.Items.ToList();
-        var total = count.TotalItemsCount;
-
-        foreach (var u in from u in foundUsersDto
-                 let bannedIds = u.MyBans.Select(x => x.BannedId)
-                 where bannedIds.Contains(userId)
-                 select u)
-        {
-            foundUsersDto.Remove(u);
-            total--;
-        }
+            var ids = new List<int>();
+            foreach (var id in user.MyBans) 
+            {
+                ids.Add(id.BannedId);
+            }
+            if (!ids.Contains(userId))
+            {
+                result.Add(user);
+                total++;           
+            }
+        };
 
         return new UsersFoundDto
         {
-            Users = foundUsersDto,
+            Users = result,
             TotalNumberOfUsers = total
         };
     }
