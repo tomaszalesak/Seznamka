@@ -12,4 +12,6 @@ public interface IUserFacade : IDisposable
         bool filterByAge, bool filterByHeight, bool filterByWeight, int pageSize);
 
     UserPhotoDto GetProfilePhoto(string username);
+    IList<UserDto> GetReceivedBans(string username);
+    IList<UserDto> GetBannedUsers(string username);
 }

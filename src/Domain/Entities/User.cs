@@ -40,8 +40,10 @@ public class User : BaseEntity
 
     public virtual IList<Chat> Chats { get; } = new List<Chat>();
 
-    public virtual IList<User> BlockedUsers { get; } = new List<User>();
-
+    public virtual IList<Ban> ReceivedBans { get; } = new List<Ban>();
+    
+    public virtual IList<Ban> MyBans { get; } = new List<Ban>();
+    
     public virtual IList<Friendship> Friendships { get; } = new List<Friendship>();
 
     public virtual Preferences Preferences { get; set; }

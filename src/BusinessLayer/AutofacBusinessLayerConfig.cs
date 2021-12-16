@@ -45,6 +45,10 @@ namespace BusinessLayer
                 .As<QueryObjectBase<UserPhoto, UserPhotoDto, UserPhotoFilterDto, IQuery<UserPhoto>>>()
                 .InstancePerDependency();
             
+            builder.RegisterType<BanQueryObject>()
+                .As<QueryObjectBase<Ban, BanDto, BanFilterDto, IQuery<Ban>>>()
+                .InstancePerDependency();
+            
             builder.RegisterType<UserQuery>()
                 .As<IQuery<User>>()
                 .InstancePerDependency();

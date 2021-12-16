@@ -30,8 +30,23 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
         return userDto.Username;
     }
 
+    public IList<UserDto> GetReceivedBans(string username)
+    {
+        var res = QueryObject.ExecuteQuery(new UsernameUserFilterDto { Username = username });
+        var user = res.Items.FirstOrDefault();
+        if (user == null) throw new Exception("Cannot find user by username.");
+
+        return null;
+    }
+
+    public IList<UserDto> GetBannedUsers(string username)
+    {
+        throw new NotImplementedException();
+    }
+
     public UserDto GetUserByUsername(string username)
     {
+        
         var user = QueryObject.ExecuteQuery(new UsernameUserFilterDto
         {
             Username = username
@@ -51,7 +66,7 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
             Height = height,
             Weight = weight
         });
-        
+
         var count = FindCountQueryObject.ExecuteQuery(new FindUserFilterDto
         {
             OmitUserByUsername = userToOmit,

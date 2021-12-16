@@ -25,39 +25,34 @@ namespace Infrastructure.Persistence.Migrations
                     Weight = table.Column<int>(type: "int", nullable: false),
                     Bio = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Longitude = table.Column<double>(type: "float", nullable: false),
-                    Latitude = table.Column<double>(type: "float", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    Latitude = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "FriendUsers",
+                name: "Bans",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    FriendId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BannedId = table.Column<int>(type: "int", nullable: false),
+                    BannerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FriendUsers", x => new { x.UserId, x.FriendId });
+                    table.PrimaryKey("PK_Bans", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FriendUsers_Users_FriendId",
-                        column: x => x.FriendId,
+                        name: "FK_Bans_Users_BannedId",
+                        column: x => x.BannedId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FriendUsers_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Bans_Users_BannerId",
+                        column: x => x.BannerId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -85,6 +80,30 @@ namespace Infrastructure.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Chats_Users_MemberTwoId",
                         column: x => x.MemberTwoId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FriendUsers",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FriendId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendUsers", x => new { x.UserId, x.FriendId });
+                    table.ForeignKey(
+                        name: "FK_FriendUsers_Users_FriendId",
+                        column: x => x.FriendId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FriendUsers_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -165,9 +184,14 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FriendUsers_FriendId",
-                table: "FriendUsers",
-                column: "FriendId");
+                name: "IX_Bans_BannedId",
+                table: "Bans",
+                column: "BannedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bans_BannerId",
+                table: "Bans",
+                column: "BannerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Chats_MemberOneId",
@@ -178,6 +202,11 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_Chats_MemberTwoId",
                 table: "Chats",
                 column: "MemberTwoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FriendUsers_FriendId",
+                table: "FriendUsers",
+                column: "FriendId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_AuthorId",
@@ -199,15 +228,13 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_UserPhotos_UserId",
                 table: "UserPhotos",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UserId",
-                table: "Users",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Bans");
+
             migrationBuilder.DropTable(
                 name: "FriendUsers");
 

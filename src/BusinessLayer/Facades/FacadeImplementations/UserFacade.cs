@@ -114,4 +114,20 @@ public class UserFacade : FacadeBase, IUserFacade
             return _userPhotoService.GetProfilePhoto(username);
         }
     }
+
+    public IList<UserDto> GetReceivedBans(string username)
+    {
+        using (UnitOfWorkProvider.Create())
+        {
+            return _userService.GetReceivedBans(username);
+        }
+    }
+
+    public IList<UserDto> GetBannedUsers(string username)
+    {
+        using (UnitOfWorkProvider.Create())
+        {
+            return _userService.GetBannedUsers(username);
+        }
+    }
 }

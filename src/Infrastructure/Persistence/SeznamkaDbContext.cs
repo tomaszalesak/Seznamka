@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
 
-public class SeznamkaDbContext : DbContext
+public sealed class SeznamkaDbContext : DbContext
 {
     public SeznamkaDbContext()
     {
@@ -22,6 +22,7 @@ public class SeznamkaDbContext : DbContext
     public DbSet<UserPhoto> UserPhotos { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Ban> Bans { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -58,6 +59,16 @@ public class SeznamkaDbContext : DbContext
             .HasOne(c => c.MemberTwo)
             .WithMany()
             .HasForeignKey(c => c.MemberTwoId);
+        
+        modelBuilder.Entity<Ban>()
+            .HasOne(ban => ban.Banner)
+            .WithMany(user => user.MyBans)
+            .HasForeignKey(c => c.BannerId);
+
+        modelBuilder.Entity<Ban>()
+            .HasOne(c => c.Banned)
+            .WithMany(user => user.ReceivedBans)
+            .HasForeignKey(c => c.BannedId);
 
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Chat)

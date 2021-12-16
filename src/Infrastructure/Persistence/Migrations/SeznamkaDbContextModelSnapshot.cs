@@ -22,19 +22,27 @@ namespace Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+            modelBuilder.Entity("Domain.Entities.Ban", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("FriendId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BannedId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "FriendId");
+                    b.Property<int>("BannerId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("FriendId");
+                    b.HasKey("Id");
 
-                    b.ToTable("FriendUsers");
+                    b.HasIndex("BannedId");
+
+                    b.HasIndex("BannerId");
+
+                    b.ToTable("Bans");
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat", b =>
@@ -63,6 +71,21 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("MemberTwoId");
 
                     b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("FriendUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
@@ -177,9 +200,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -188,8 +208,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Users");
                 });
@@ -215,23 +233,23 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("UserPhotos");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+            modelBuilder.Entity("Domain.Entities.Ban", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
+                    b.HasOne("Domain.Entities.User", "Banned")
+                        .WithMany("ReceivedBans")
+                        .HasForeignKey("BannedId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("Friendships")
-                        .HasForeignKey("UserId")
+                    b.HasOne("Domain.Entities.User", "Banner")
+                        .WithMany("MyBans")
+                        .HasForeignKey("BannerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Friend");
+                    b.Navigation("Banned");
 
-                    b.Navigation("User");
+                    b.Navigation("Banner");
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat", b =>
@@ -251,6 +269,25 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("MemberOne");
 
                     b.Navigation("MemberTwo");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Friendships")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
@@ -283,14 +320,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
-                {
-                    b.HasOne("Domain.Entities.User", null)
-                        .WithMany("BlockedUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -309,15 +338,17 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("BlockedUsers");
-
                     b.Navigation("Chats");
 
                     b.Navigation("Friendships");
 
+                    b.Navigation("MyBans");
+
                     b.Navigation("Photos");
 
                     b.Navigation("Preferences");
+
+                    b.Navigation("ReceivedBans");
                 });
 #pragma warning restore 612, 618
         }

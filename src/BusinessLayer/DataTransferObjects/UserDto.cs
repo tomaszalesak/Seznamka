@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace BusinessLayer.DataTransferObjects;
 
@@ -26,11 +27,15 @@ public class UserDto : BaseDto
 
     public double Latitude { get; set; }
 
-    public virtual IList<ChatDto> Chats { get; set; }
+    public IList<ChatDto> Chats { get; set; }
+    
+    public IList<BanDto> ReceivedBans { get; set; }
+    
+    public IList<BanDto> MyBans { get; set; }
 
-    public virtual IList<UserDto> BlockedUsers { get; set; }
+    public IList<UserDto> BlockedUsers { get; set; }
 
-    public virtual IList<FriendshipDto> Friendships { get; set; }
+    public IList<FriendshipDto> Friendships { get; set; }
 
     public PreferencesDto Preferences { get; set; }
 
