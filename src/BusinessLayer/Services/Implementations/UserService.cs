@@ -46,7 +46,6 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
 
     public UserDto GetUserByUsername(string username)
     {
-        
         var user = QueryObject.ExecuteQuery(new UsernameUserFilterDto
         {
             Username = username
@@ -54,7 +53,7 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
         return user.Items?.FirstOrDefault();
     }
 
-    public UsersFoundDto GetAllUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight,
+    public UsersFoundDto GetAllPossibleUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight,
         UserHeightFilterDto height, int pageSize, int requestedPage)
     {
         var foundUsers = FindQueryObject.ExecuteQuery(new FindUserFilterDto
@@ -77,10 +76,24 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
             Weight = weight
         });
 
+        var userId = QueryObject.ExecuteQuery(new UsernameUserFilterDto { Username = userToOmit }).Items[0].Id;
+
+        var foundUsersDto = foundUsers.Items.ToList();
+        var total = count.TotalItemsCount;
+
+        foreach (var u in from u in foundUsersDto
+                 let bannedIds = u.MyBans.Select(x => x.BannedId)
+                 where bannedIds.Contains(userId)
+                 select u)
+        {
+            foundUsersDto.Remove(u);
+            total--;
+        }
+
         return new UsersFoundDto
         {
-            Users = foundUsers.Items.ToList(),
-            TotalNumberOfUsers = count.TotalItemsCount
+            Users = foundUsersDto,
+            TotalNumberOfUsers = total
         };
     }
 
