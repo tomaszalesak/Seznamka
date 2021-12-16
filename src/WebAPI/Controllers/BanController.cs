@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using BusinessLayer.DataTransferObjects;
 using BusinessLayer.Facades.FacadeInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,5 +27,13 @@ public class BanController : ControllerBase
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         await _banFacade.Ban(jwtUsername, usernameToBan);
         return Ok();
+    }
+    
+    [HttpGet("banned")]
+    public ActionResult<IList<UserDto>> BannedUsers()
+    {
+        if (_httpContextAccessor.HttpContext == null) return Forbid();
+        var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        return Ok(_banFacade.BannedUsers(jwtUsername));
     }
 }

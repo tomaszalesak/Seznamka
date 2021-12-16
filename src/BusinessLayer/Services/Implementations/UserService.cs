@@ -39,11 +39,6 @@ public class UserService : CrudQueryServiceBase<User, UserDto, UsernameUserFilte
         return null;
     }
 
-    public IList<UserDto> GetBannedUsers(string username)
-    {
-        throw new NotImplementedException();
-    }
-
     public UserDto GetUserByUsername(string username)
     {
         var user = QueryObject.ExecuteQuery(new UsernameUserFilterDto

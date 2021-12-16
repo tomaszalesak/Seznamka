@@ -1,6 +1,9 @@
-﻿namespace BusinessLayer.Facades.FacadeInterfaces;
+﻿using BusinessLayer.DataTransferObjects;
+
+namespace BusinessLayer.Facades.FacadeInterfaces;
 
 public interface IBanFacade : IDisposable
 {
     Task Ban(string banningUser, string userToBeBanned);
+    IList<BanWithUsersDto> BannedUsers(string jwtUsername);
 }

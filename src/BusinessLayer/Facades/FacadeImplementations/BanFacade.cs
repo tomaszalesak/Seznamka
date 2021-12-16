@@ -7,16 +7,19 @@ namespace BusinessLayer.Facades.FacadeImplementations;
 
 public class BanFacade : FacadeBase, IBanFacade
 {
+    private readonly IBannedUsersService _bannedUsersService;
     private readonly IBanService _banService;
     private readonly IUserService _userService;
     private readonly IUserService _userService2;
 
-    public BanFacade(IUnitOfWorkProvider provider, IUserService userService, IUserService userService2, IBanService banService) :
+    public BanFacade(IUnitOfWorkProvider provider, IUserService userService, IUserService userService2,
+        IBanService banService, IBannedUsersService bannedUsersService) :
         base(provider)
     {
         _userService = userService;
         _userService2 = userService2;
         _banService = banService;
+        _bannedUsersService = bannedUsersService;
     }
 
     public async Task Ban(string banningUser, string userToBeBanned)
@@ -31,5 +34,12 @@ public class BanFacade : FacadeBase, IBanFacade
         });
 
         await uow.CommitAsync();
+    }
+
+    public IList<BanWithUsersDto> BannedUsers(string jwtUsername)
+    {
+        using var uow = UnitOfWorkProvider.Create();
+        var user = _userService.GetUserByUsername(jwtUsername);
+        return _bannedUsersService.GetBanned(user.Id);
     }
 }

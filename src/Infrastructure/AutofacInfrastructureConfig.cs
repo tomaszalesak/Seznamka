@@ -33,6 +33,14 @@ namespace Infrastructure
                 .AsSelf()
                 .InstancePerDependency();
             
+            builder.RegisterType<BannedUsersQuery>()
+                .AsSelf()
+                .InstancePerDependency();
+            
+            builder.RegisterType<BanQuery>()
+                .AsSelf()
+                .InstancePerDependency();
+            
             builder.RegisterType<ChatQuery>()
                 .AsSelf()
                 .InstancePerDependency();

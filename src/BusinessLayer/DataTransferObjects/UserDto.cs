@@ -32,9 +32,7 @@ public class UserDto : BaseDto
     public IList<BanDto> ReceivedBans { get; set; }
     
     public IList<BanDto> MyBans { get; set; }
-
-    public IList<UserDto> BlockedUsers { get; set; }
-
+    
     public IList<FriendshipDto> Friendships { get; set; }
 
     public PreferencesDto Preferences { get; set; }
