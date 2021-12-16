@@ -10,6 +10,6 @@ namespace BusinessLayer.Services.Interfaces
         public UserDto GetUserByUsername(string username);
         public bool UsernameAlreadyExists(string username);
         Task<string> GetUsernameAsync(int userId);
-        UsersFoundDto GetAllUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight, UserHeightFilterDto height, int pageSize, int requestedPage);
+        UsersFoundDto GetAllPossibleUsers(string userToOmit, UserAgeFilterDto age, UserWeightDto weight, UserHeightFilterDto height, int pageSize, int requestedPage);
     }
 }

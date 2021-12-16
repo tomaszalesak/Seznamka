@@ -85,7 +85,7 @@ public class UserFacade : FacadeBase, IUserFacade
         using (UnitOfWorkProvider.Create())
         {
             var user = _userService.GetUserByUsername(usernameToOmit);
-            return _userService.GetAllUsers(usernameToOmit, filterByAge
+            return _userService.GetAllPossibleUsers(usernameToOmit, filterByAge
                 ? new UserAgeFilterDto
                 {
                     MinAge = user.Preferences.MinAge,
