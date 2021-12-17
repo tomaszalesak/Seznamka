@@ -4,7 +4,7 @@ export type User = {
   username?: string;
   asswordHash?: string;
   birthdate?: string; // date, zatim nevim jak
-  gender?: string;
+  gender?: number;
   height?: number;
   weight?: number;
   bio?: string;
@@ -14,7 +14,7 @@ export type User = {
   blockedUsers?: User[];
   friendships?: string[]; //friedsihp dto neni
   references?: Preferences;
-  photo?: string[];
+  photo?: { image: string }[];
 };
 
 export type Preferences = {
@@ -45,3 +45,13 @@ export type Message = {
 };
 
 export type FindUsers = { users: User[]; totalNumberOfUsers: number };
+
+export type Bans = {
+  id?: number;
+  banned?: {
+    name?: string;
+    surname?: string;
+    username?: string;
+    id?: 1;
+  };
+};

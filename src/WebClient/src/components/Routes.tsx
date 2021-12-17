@@ -7,12 +7,13 @@ import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Following from '../pages/Following';
+import Block from '../pages/Block';
 
 const Routes = () => (
   <ReactRouters>
     <Route path="/" element={<Home />} />
     <Route path="/profile" element={<Profile />}>
-      <Route path=":profileId" element={<Profile />} />
+      <Route path=":profileUserName" element={<Profile />} />
     </Route>
 
     <Route path="/find" element={<Find />} />
@@ -20,6 +21,7 @@ const Routes = () => (
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/following" element={<Following />} />
+    <Route path="/block" element={<Block />} />
     <Route
       path="*"
       element={

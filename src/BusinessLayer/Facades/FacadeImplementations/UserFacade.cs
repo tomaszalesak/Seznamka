@@ -107,6 +107,14 @@ public class UserFacade : FacadeBase, IUserFacade
         }
     }
 
+    public UserDto GetUserByUsername(string username)
+    {
+        using (UnitOfWorkProvider.Create())
+        {
+            return _userService.GetUserByUsername(username);
+        }
+    }
+
     public UserPhotoDto GetProfilePhoto(string username)
     {
         using (UnitOfWorkProvider.Create())

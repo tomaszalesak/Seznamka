@@ -10,18 +10,12 @@ import {
   ImageListItem
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { deleteDoc, getDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import axios, { Method } from 'axios';
 
 import { useLogginUser } from '../hooks/useLoggedInUser';
-import {
-  chatsDocument,
-  User,
-  userBlockedDocument,
-  userFollowDocument,
-  usersDocument
-} from '../utils/firebase';
 import useProfilePicture from '../hooks/useProfilePicture';
+import { User } from '../utils/types';
 
 const itemData = [
   {
@@ -75,44 +69,38 @@ const itemData = [
 ];
 
 const Profile = () => {
-  const { profileId } = useParams();
+  const { profileUserName } = useParams();
   const [logUser, _setLogUser] = useLogginUser();
 
   const [profile, setProfile] = useState<User>();
   const [blocked, setBlocked] = useState<boolean>();
   const [follow, setFollow] = useState<boolean>();
 
-  // useEffect(() => {
-  //   const getProfile = async () => {
-  //     if (profileId && user?.email) {
-  //       const followDoc = await getDoc(userFollowDocument(user?.email, profileId));
-  //       const blockedDoc = await getDoc(userBlockedDocument(profileId, user?.email));
-  //       if (followDoc.exists()) {
-  //         setFollow(true);
-  //       }
-  //       if (blockedDoc.exists()) {
-  //         setBlocked(true);
-  //       }
-  //     }
-  //     if (profileId || user?.email) {
-  //       let userDoc;
-  //       if (profileId) {
-  //         userDoc = usersDocument(profileId);
-  //       } else if (user?.email) {
-  //         userDoc = usersDocument(user.email);
-  //       } else {
-  //         return;
-  //       }
-  //       userDoc = await getDoc(userDoc);
-  //       if (userDoc.exists()) {
-  //         setProfile(userDoc.data());
-  //       } else {
-  //         console.log('No such document!');
-  //       }
-  //     }
-  //   };
-  //   getProfile();
-  // }, [user, profileId]);
+  // const photo = useProfilePicture(profile?.photo);
+
+  console.log(profileUserName);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      if (logUser?.jwt) {
+        const config = {
+          method: 'get' as Method,
+          url: 'https://localhost:7298/api/User',
+          params: {
+            username: profileUserName
+          },
+          headers: {
+            accept: 'text/plain',
+            Authorization: `Bearer ${logUser.jwt}`
+          }
+        };
+
+        const { data: response } = await axios(config);
+        setProfile(response);
+      }
+    };
+    getProfile();
+  }, []);
 
   // const followHandler = async () => {
   //   if (user?.email && profileId) {
@@ -133,66 +121,77 @@ const Profile = () => {
   //   }
   // };
 
-  // const blockHandler = async () => {
-  //   if (user?.email && profileId) {
-  //     await setDoc(userBlockedDocument(profileId, user?.email), {
-  //       email: profileId,
-  //       first_name: profile?.first_name,
-  //       last_name: profile?.last_name
-  //     });
+  const blockHandler = async () => {
+    if (logUser?.jwt) {
+      const config = {
+        method: 'post' as Method,
+        url: 'https://localhost:7298/api/Ban',
+        params: {
+          userToBan: profileUserName
+        },
+        headers: {
+          accept: 'text/plain',
+          Authorization: `Bearer ${logUser.jwt}`
+        }
+      };
 
-  //     const q1 = await getDoc(chatsDocument(`${user?.email}${profileId}`));
-  //     const q2 = await getDoc(chatsDocument(`${profileId}${user?.email}`));
-  //     if (q1.exists()) {
-  //       await deleteDoc(chatsDocument(`${user?.email}${profileId}`));
-  //     }
-  //     if (q2.exists()) {
-  //       await deleteDoc(chatsDocument(`${profileId}${user?.email}`));
-  //     }
+      await axios(config);
+      setBlocked(true);
+    }
+  };
 
-  //     setBlocked(true);
-  //   }
-  // };
+  const birthdayToString = () => {
+    if (profile?.birthdate) {
+      const birth = new Date(profile?.birthdate);
+      return `${birth.getDate()}.${birth.getMonth() + 1}.${birth.getFullYear()}`;
+    }
+    return '';
+  };
 
-  const photo = useProfilePicture(profile?.photo);
-
+  const genderToString = () => {
+    if (profile?.gender !== null) {
+      if (profile?.gender === 1) {
+        return `Male`;
+      } else if (profile?.gender === 0) {
+        return `Female`;
+      } else {
+        return 'Other';
+      }
+    }
+    return '';
+  };
   return (
     <Grid container spacing={4}>
       <Grid item xs={12} sm={6} md={4}>
         <Card>
           <CardActions>
-            {profileId ? (
+            {profileUserName ? (
               <>
-                {!follow ? (
-                  /*<Button size="small" onClick={followHandler}>*/
-                  <Button size="small">Follow</Button>
-                ) : (
-                  ''
-                )}
+                {!follow ? <Button size="small">Follow</Button> : ''}
                 {!blocked ? (
-                  /*<Button size="small" onClick={blockHandler}>*/
-                  <Button size="small">Block</Button>
+                  <Button size="small" onClick={blockHandler}>
+                    Block
+                  </Button>
                 ) : (
                   ''
                 )}
-                <Button size="small">Chat</Button>
               </>
             ) : (
               ''
             )}
           </CardActions>
-          <CardMedia component="img" image={photo} alt="random" />
+          <CardMedia component="img" image={profile?.photo?.[0].image} alt="random" />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {profile ? `${profile?.first_name} ${profile?.last_name}` : ''}
+              {profile ? `${profile?.name} ${profile?.surname}` : ''}
             </Typography>
             <Typography>BIRTH</Typography>
             <Typography sx={{ ml: 1, mb: 2 }} variant="body2" color="text.secondary">
-              {profile ? `${profile?.birth}` : ''}
+              {profile ? birthdayToString() : ''}
             </Typography>
             <Typography>GENDER</Typography>
             <Typography sx={{ ml: 1, mb: 2 }} variant="body2" color="text.secondary">
-              {profile ? `${profile?.gender}` : ''}
+              {profile ? genderToString() : ''}
             </Typography>
             <Typography>HEIGHT</Typography>
             <Typography sx={{ ml: 1, mb: 2 }} variant="body2" color="text.secondary">

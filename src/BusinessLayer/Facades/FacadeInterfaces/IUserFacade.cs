@@ -8,6 +8,8 @@ public interface IUserFacade : IDisposable
 
     string LoginAsync(UserLoginDto userLoginDto);
 
+    UserDto GetUserByUsername(string userName);
+
     UsersFoundDto GetAllPossiblePartners(string usernameToOmit, int requestedPage,
         bool filterByAge, bool filterByHeight, bool filterByWeight, int pageSize);
 

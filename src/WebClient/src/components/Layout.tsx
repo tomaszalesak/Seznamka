@@ -22,7 +22,8 @@ const loginPages = [
   { name: 'Home', link: '/' },
   { name: 'Find', link: '/find' },
   { name: 'Chats', link: '/chats' },
-  { name: 'Following', link: '/following' }
+  { name: 'Following', link: '/following' },
+  { name: 'Blocked', link: '/block' }
 ];
 
 const Layout: FC = ({ children }) => {

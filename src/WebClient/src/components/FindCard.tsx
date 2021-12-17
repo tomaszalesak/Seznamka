@@ -1,14 +1,4 @@
-import {
-  CardMedia,
-  CardContent,
-  Card,
-  Typography,
-  CardHeader,
-  Button,
-  Grid,
-  Box,
-  CardActionArea
-} from '@mui/material';
+import { CardMedia, CardContent, Card, Typography, Grid, CardActionArea } from '@mui/material';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 

@@ -67,6 +67,16 @@ public class UserController : ControllerBase
         return Ok(await _userFacade.RegisterAsync(userDto));
     }
 
+    [HttpGet]
+    public ActionResult<UserDto> GetUserByUsername([FromQuery(Name = "username")] string username = null)
+    {
+        if (_httpContextAccessor.HttpContext == null) return Forbid();
+        var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        username ??= jwtUsername;
+        var user = _userFacade.GetUserByUsername(username);
+        return Ok(user);
+    }
+
     [HttpGet("find")]
     public ActionResult<UsersFoundDto> GetAllPossiblePartners([FromQuery(Name = "age")] bool age = false,
         [FromQuery(Name = "height")] bool height = false, [FromQuery(Name = "weight")] bool weight = false,

@@ -1,59 +1,32 @@
 import { Grid } from '@mui/material';
-import { onSnapshot, getDoc, getDocs } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import FindCard from '../components/FindCard';
-import {
-  User,
-  usersCollection,
-  UserWithId,
-  usersDocument,
-  userFollowCollection
-} from '../utils/firebase';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 import { FindUsers } from '../utils/types';
 
 const Following = () => {
-  //const loggedInUser = useUser();
+  const [logUser, _setLogUser] = useLogginUser();
   const [findUsers, setfindUsers] = useState<FindUsers>({ users: [], totalNumberOfUsers: 1 });
-  const [profile, setProfile] = useState<User>();
-  // const user = useUser();
 
   // useEffect(() => {
-  //   (async () => {
-  //     if (user?.email) {
-  //       const userDoc = usersDocument(user.email);
-  //       const uDoc = await getDoc(userDoc);
-  //       setProfile(uDoc.data());
+  //   const getProfile = async () => {
+  //     if (logUser?.jwt) {
+  //       const config = {
+  //         method: 'get' as Method,
+  //         url: 'https://localhost:7298/api/Ban/banned',
+  //         headers: {
+  //           accept: 'text/plain',
+  //           Authorization: `Bearer ${logUser.jwt}`
+  //         }
+  //       };
+
+  //       const { data: response } = await axios(config);
+  //       setFindUsers(response);
   //     }
-  //   })();
-  // }, []);
-
-  // useEffect(() => {
-  //   const follow: string[] = [];
-  //   (async () => {
-  //     const findDocs = await getDocs(userFollowCollection(loggedInUser?.email as string));
-  //     findDocs.forEach(doc => {
-  //       // doc.data() is never undefined for query doc snapshots
-  //       console.log(doc.id, ' => ', doc.data());
-  //       follow.push(doc.id);
-  //     });
-  //   })();
-
-  //   // Call onSnapshot() to listen to changes
-  //   const unsubscribe = onSnapshot(usersCollection, snapshot => {
-  //     // Access .docs property of snapshot
-  //     setUsers(
-  //       snapshot.docs
-  //         .filter(doc => doc.id !== loggedInUser?.email)
-  //         .filter(doc => follow.find((e: string) => e === doc.id))
-  //         .map(doc => ({ id: doc.id, ...doc.data() }))
-  //     );
-  //   });
-  //   // Don't forget to unsubscribe from listening to changes
-  //   return () => {
-  //     unsubscribe();
   //   };
-  // }, [loggedInUser, profile]);
+  //   getProfile();
+  // }, []);
 
   return (
     <Grid container spacing={4}>
