@@ -36,4 +36,13 @@ public class BanController : ControllerBase
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         return Ok(_banFacade.BannedUsers(jwtUsername));
     }
+    
+    [HttpDelete("removeBan")]
+    public async Task<ActionResult> RemoveBan([FromQuery] int id)
+    {
+        if (_httpContextAccessor.HttpContext == null) return Forbid();
+        var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        await _banFacade.RemoveBan(jwtUsername, id);
+        return Ok();
+    }
 }

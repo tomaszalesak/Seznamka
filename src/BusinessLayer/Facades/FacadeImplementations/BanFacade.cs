@@ -42,4 +42,21 @@ public class BanFacade : FacadeBase, IBanFacade
         var user = _userService.GetUserByUsername(jwtUsername);
         return _bannedUsersService.GetBanned(user.Id);
     }
+
+    public async Task RemoveBan(string jwtUsername, int id)
+    {
+        using var uow = UnitOfWorkProvider.Create();
+        var user = _userService.GetUserByUsername(jwtUsername);
+        var ban = await _bannedUsersService.GetAsync(id);
+        if (ban is null)
+        {
+            throw new Exception("no ban with this id");
+        }
+        if (user.Id != ban.BannerId)
+        {
+            throw new Exception("Cannot remove ban of another user.");
+        }
+        await _bannedUsersService.DeleteAsync(id);
+        await uow.CommitAsync();
+    }
 }

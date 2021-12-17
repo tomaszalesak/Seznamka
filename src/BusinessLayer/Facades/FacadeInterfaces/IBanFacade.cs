@@ -6,4 +6,5 @@ public interface IBanFacade : IDisposable
 {
     Task Ban(string banningUser, string userToBeBanned);
     IList<BanWithUsersDto> BannedUsers(string jwtUsername);
+    Task RemoveBan(string jwtUsername, int id);
 }
