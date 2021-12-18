@@ -12,9 +12,9 @@ import {
   TextField
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 import { Message } from '../utils/types';
 import { ChatWithEmail } from '../utils/firebase';
@@ -28,7 +28,10 @@ const Chats = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [fieldValue, setFieldValue] = useState('');
 
-  const [connection, setConnection] = useState(null);
+  const [connection, setConnection] = useState<HubConnection>();
+  const latestMassages = useRef<Message[]>([]);
+
+  latestMassages.current = messages;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.value);
@@ -42,6 +45,24 @@ const Chats = () => {
 
     setConnection(newConnection);
   }, []);
+
+  useEffect(() => {
+    if (connection) {
+      connection
+        .start()
+        .then(result => {
+          console.log('Connected!');
+
+          connection.on('ReceiveMessage', message => {
+            const updatedMessages = [...latestMassages.current];
+            updatedMessages.push(message);
+
+            setMessages(updatedMessages);
+          });
+        })
+        .catch(e => console.log('Connection failed: ', e));
+    }
+  }, [connection]);
 
   // useEffect(() => {
   //   const unsubscribe = onSnapshot(chatsCollection, snapshot => {
@@ -62,35 +83,44 @@ const Chats = () => {
   //   };
   // }, [loggedInUser]);
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    let unsubscribe = () => {};
-    if (selectedChat !== '') {
-      const q = query(chatMessagesCollection(selectedChat), orderBy('createdAt'));
-      unsubscribe = onSnapshot(q, snapshot => {
-        const result = snapshot.docs.map(doc => doc.data());
-        setMessages(result);
-      });
-    }
-    return () => {
-      unsubscribe();
-    };
-  }, [selectedChat]);
+  // useEffect(() => {
+  //   // eslint-disable-next-line @typescript-eslint/no-empty-function
+  //   let unsubscribe = () => {};
+  //   if (selectedChat !== '') {
+  //     const q = query(chatMessagesCollection(selectedChat), orderBy('createdAt'));
+  //     unsubscribe = onSnapshot(q, snapshot => {
+  //       const result = snapshot.docs.map(doc => doc.data());
+  //       setMessages(result);
+  //     });
+  //   }
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [selectedChat]);
 
   const handleListItemClick = (index: string) => {
     setSelectedChat(index);
   };
 
-  // const addMessage = async () => {
-  //   if (selectedChat !== '')
-  //     await addDoc(chatMessagesCollection(selectedChat), {
-  //       createdAt: new Date(),
-  //       time: new Date().toJSON().slice(0, 10).split('-').reverse().join('.'),
-  //       author: loggedInUser?.email,
-  //       message: fieldValue
-  //     });
-  //   setFieldValue('');
-  // };
+  const addMessage = async () => {
+    if (selectedChat !== '') {
+      const chatMessage = {
+        createdAt: new Date(),
+        time: new Date().toJSON().slice(0, 10).split('-').reverse().join('.'),
+        message: fieldValue
+      };
+      if (connection?.connectionStarted) {
+        try {
+          await connection.send('SendMessage', chatMessage);
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        alert('No connection to server yet.');
+      }
+      setFieldValue('');
+    }
+  };
 
   return (
     <Grid container component={Paper} spacing={2} sx={{ height: '92vh' }}>
@@ -158,7 +188,7 @@ const Chats = () => {
             />
           </Grid>
           <Grid item xs={1} sx={{ textAlign: 'right' }}>
-            <Fab color="primary" aria-label="add" size="small">
+            <Fab color="primary" aria-label="add" size="small" onClick={addMessage}>
               <SendIcon />
             </Fab>
           </Grid>
