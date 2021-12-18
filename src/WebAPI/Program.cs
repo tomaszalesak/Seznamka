@@ -12,11 +12,18 @@ using WebAPI.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 var host = builder.Host;
 var services = builder.Services;
+const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule(new AutofacBusinessLayerConfig());
+});
+
+services.AddCors(options =>
+{
+    options.AddPolicy(myAllowSpecificOrigins,
+        corsPolicyBuilder => { corsPolicyBuilder.WithOrigins("htttp://localhost:3000"); });
 });
 
 services.AddDbContext<SeznamkaDbContext>(options =>
@@ -48,12 +55,9 @@ services.AddSignalR();
 
 await using var app = builder.Build();
 
+app.UseCors(myAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
 
 if (app.Environment.IsDevelopment())
 {
