@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using Domain.Enums;
 
 namespace BusinessLayer.DataTransferObjects;
 
@@ -29,11 +28,11 @@ public class UserDto : BaseDto
 
     public IList<ChatDto> Chats { get; set; }
     
-    public IList<BanDto> ReceivedBans { get; set; }
+    public IList<BanWithUsernameDto> ReceivedBans { get; set; }
     
-    public IList<BanDto> MyBans { get; set; }
+    public IList<BanWithUsernameDto> MyBans { get; set; }
     
-    public IList<FriendshipDto> Friendships { get; set; }
+    public IList<FriendshipwithUsernameDto> Friendships { get; set; }
 
     public PreferencesDto Preferences { get; set; }
 

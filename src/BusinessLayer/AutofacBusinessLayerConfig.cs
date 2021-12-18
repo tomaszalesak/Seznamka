@@ -49,6 +49,10 @@ namespace BusinessLayer
                 .As<QueryObjectBase<Ban, BanDto, BanFilterDto, IQuery<Ban>>>()
                 .InstancePerDependency();
             
+            builder.RegisterType<FriendshipQueryObject>()
+                .As<QueryObjectBase<Friendship, FriendshipDto, FriendshipFilterDto, IQuery<Friendship>>>()
+                .InstancePerDependency();
+            
             builder.RegisterType<BannedUsersQueryObject>()
                 .As<QueryObjectBase<Ban, BanWithUsersDto, BannedUsersFilterDto, IQuery<Ban>>>()
                 .InstancePerDependency();
@@ -59,6 +63,10 @@ namespace BusinessLayer
             
             builder.RegisterType<BanQuery>()
                 .As<IQuery<Ban>>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<FriendshipQuery>()
+                .As<IQuery<Friendship>>()
                 .InstancePerDependency();
             
             builder.RegisterType<BannedUsersQuery>()

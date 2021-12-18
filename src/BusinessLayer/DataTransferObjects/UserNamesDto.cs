@@ -7,4 +7,5 @@ public class UserNamesDto : BaseDto
     public string Surname { get; set; }
     
     public string Username { get; set; }
+    public IList<UserPhotoDto> Photos { get; set; }
 }

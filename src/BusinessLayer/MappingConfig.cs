@@ -13,16 +13,19 @@ public static class MappingConfig
     {
         config.CreateMap<UserPhoto, UserPhotoDto>().ReverseMap();
         config.CreateMap<Ban, BanDto>().ReverseMap();
+        config.CreateMap<Friendship, FriendshipDto>().ReverseMap();
         config.CreateMap<Ban, BanWithUsersDto>().ReverseMap();
+        config.CreateMap<Ban, BanWithUsernameDto>().ReverseMap();
         config.CreateMap<Preferences, PreferencesDto>().ReverseMap();
         config.CreateMap<User, UserDto>().ReverseMap();
         config.CreateMap<User, UserNamesDto>().ReverseMap();
         config.CreateMap<User, UserRegistrationDto>().ReverseMap();
+        config.CreateMap<Friendship, FriendshipwithUsernameDto>().ReverseMap();
         config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, UsernameUserFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, FindUserFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<UserPhoto>, QueryResultDto<UserPhotoDto, UserPhotoFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<Ban>, QueryResultDto<BanWithUsersDto, BannedUsersFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<Ban>, QueryResultDto<BanDto, BanFilterDto>>().ReverseMap();
-
+        config.CreateMap<QueryResult<Friendship>, QueryResultDto<FriendshipDto, FriendshipFilterDto>>().ReverseMap();
     }
 }

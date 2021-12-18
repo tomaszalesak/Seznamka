@@ -44,6 +44,10 @@ namespace Infrastructure
             builder.RegisterType<ChatQuery>()
                 .AsSelf()
                 .InstancePerDependency();
+            
+            builder.RegisterType<FriendshipQuery>()
+                .AsSelf()
+                .InstancePerDependency();
         }
     }
 }
