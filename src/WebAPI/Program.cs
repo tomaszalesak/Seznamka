@@ -5,6 +5,7 @@ using BusinessLayer;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.Hubs;
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 var host = builder.Host;
 var services = builder.Services;
 const string allowAllOrigins = "allowAllOrigins";
+const string hubUri = "/chatHub";
 
 host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
@@ -49,9 +51,22 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
         ClockSkew = TimeSpan.FromSeconds(30)
     };
-});
+    opt.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments(hubUri))
+                context.Token = accessToken;
 
+            return Task.CompletedTask;
+        }
+    };
+});
 services.AddSignalR();
+services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
 await using var app = builder.Build();
 
@@ -69,6 +84,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ChatHub>(hubUri, options => { options.CloseOnAuthenticationExpiration = true; });
 
 await app.RunAsync();
