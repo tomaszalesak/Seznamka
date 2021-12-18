@@ -14,8 +14,10 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useState } from 'react';
 import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 
-import { chatMessagesCollection, chatsCollection, ChatWithEmail, Message } from '../utils/firebase';
+import { Message } from '../utils/types';
+import { ChatWithEmail } from '../utils/firebase';
 
 const Chats = () => {
   //const loggedInUser = useUser();
@@ -26,9 +28,20 @@ const Chats = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [fieldValue, setFieldValue] = useState('');
 
+  const [connection, setConnection] = useState(null);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.value);
   };
+
+  useEffect(() => {
+    const newConnection = new HubConnectionBuilder()
+      .withUrl('/chatHub')
+      .withAutomaticReconnect()
+      .build();
+
+    setConnection(newConnection);
+  }, []);
 
   // useEffect(() => {
   //   const unsubscribe = onSnapshot(chatsCollection, snapshot => {

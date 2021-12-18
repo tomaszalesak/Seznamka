@@ -14,7 +14,7 @@ const Following = () => {
   //     if (logUser?.jwt) {
   //       const config = {
   //         method: 'get' as Method,
-  //         url: 'https://localhost:7298/api/Ban/banned',
+  //         url: '/api/Ban/banned',
   //         headers: {
   //           accept: 'text/plain',
   //           Authorization: `Bearer ${logUser.jwt}`

@@ -15,7 +15,7 @@ const Login = () => {
 
   const [submitError, setSubmitError] = useState<string>();
 
-  const baseURL = 'https://localhost:7298/api/User/login';
+  const baseURL = '/api/User/login';
 
   return (
     <div>

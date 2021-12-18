@@ -14,7 +14,7 @@ type ChipData = {
 };
 
 // GET
-// https://localhost:7298/api/User/find?age=true&height=true&weight=false&page=3
+// /api/User/find?age=true&height=true&weight=false&page=3
 // create UserDto type
 
 const Find = () => {
@@ -52,7 +52,7 @@ const Find = () => {
     if (logUser?.jwt) {
       const config = {
         method: 'get' as Method,
-        url: 'https://localhost:7298/api/User/find',
+        url: '/api/User/find',
         params: {
           age: chipData[0].used,
           height: chipData[1].used,

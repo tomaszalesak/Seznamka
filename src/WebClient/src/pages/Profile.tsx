@@ -85,7 +85,7 @@ const Profile = () => {
       if (logUser?.jwt) {
         const config = {
           method: 'get' as Method,
-          url: 'https://localhost:7298/api/User',
+          url: '/api/User',
           params: {
             username: profileUserName
           },
@@ -125,7 +125,7 @@ const Profile = () => {
     if (logUser?.jwt) {
       const config = {
         method: 'post' as Method,
-        url: 'https://localhost:7298/api/Ban',
+        url: '/api/Ban',
         params: {
           userToBan: profileUserName
         },
