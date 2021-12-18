@@ -52,7 +52,7 @@ const Find = () => {
     if (logUser?.jwt) {
       const config = {
         method: 'get' as Method,
-        url: '/api/User/find',
+        url: 'https://localhost:7298/api/User/find',
         params: {
           age: chipData[0].used,
           height: chipData[1].used,

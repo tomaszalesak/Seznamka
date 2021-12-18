@@ -13,14 +13,14 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useRef, useState } from 'react';
-import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import { Message } from '../utils/types';
 import { ChatWithEmail } from '../utils/firebase';
+import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const Chats = () => {
-  //const loggedInUser = useUser();
+  const [logUser, _setLogUser] = useLogginUser();
   const [selectedChat, setSelectedChat] = useState('');
 
   const [chats, setChats] = useState<ChatWithEmail[]>([]);
@@ -39,9 +39,14 @@ const Chats = () => {
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl('/chatHub')
+      .withUrl('https://localhost:7298/chatHub', {
+        accessTokenFactory: () => logUser!.jwt
+      })
+      .configureLogging(LogLevel.Information)
       .withAutomaticReconnect()
       .build();
+
+    console.log(newConnection);
 
     setConnection(newConnection);
   }, []);
@@ -50,10 +55,10 @@ const Chats = () => {
     if (connection) {
       connection
         .start()
-        .then(result => {
+        .then(_result => {
           console.log('Connected!');
 
-          connection.on('ReceiveMessage', message => {
+          connection.on('ReceiveMessage', (message: Message) => {
             const updatedMessages = [...latestMassages.current];
             updatedMessages.push(message);
 
@@ -109,7 +114,7 @@ const Chats = () => {
         time: new Date().toJSON().slice(0, 10).split('-').reverse().join('.'),
         message: fieldValue
       };
-      if (connection?.connectionStarted) {
+      if (connection) {
         try {
           await connection.send('SendMessage', chatMessage);
         } catch (e) {

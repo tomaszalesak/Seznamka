@@ -25,7 +25,7 @@ host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 services.AddCors(options =>
 {
     options.AddPolicy(allowAllOrigins,
-        corsPolicyBuilder => { corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
+        corsPolicyBuilder => { corsPolicyBuilder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000"); });
 });
 
 services.AddDbContext<SeznamkaDbContext>(options =>
@@ -51,25 +51,11 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
         ClockSkew = TimeSpan.FromSeconds(30)
     };
-    opt.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            var accessToken = context.Request.Query["access_token"];
-            var path = context.HttpContext.Request.Path;
-            if (!string.IsNullOrEmpty(accessToken) &&
-                path.StartsWithSegments(hubUri))
-                context.Token = accessToken;
-
-            return Task.CompletedTask;
-        }
-    };
 });
 services.AddSignalR();
-services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
 await using var app = builder.Build();
-
+app.UseWebSockets();
 app.UseCors(allowAllOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
@@ -84,6 +70,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<ChatHub>(hubUri, options => { options.CloseOnAuthenticationExpiration = true; });
+
+app.MapHub<ChatHub>(hubUri);
 
 await app.RunAsync();

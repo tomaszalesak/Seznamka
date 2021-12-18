@@ -164,7 +164,7 @@ const Register = () => {
 
               const config = {
                 method: 'post' as Method,
-                url: '/api/User/register',
+                url: 'https://localhost:7298/api/User/register',
                 headers: {
                   accept: '*/*'
                 },
