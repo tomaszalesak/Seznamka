@@ -58,7 +58,7 @@ const Login = () => {
         <Typography variant="h4" component="h2" textAlign="center" mb={3}>
           Login
         </Typography>
-        <TextField label="Username" {...usernameProps} type="email" />
+        <TextField label="Username" {...usernameProps} type="text" />
         <TextField label="Password" {...passwordProps} type="password" />
         <Box
           sx={{
