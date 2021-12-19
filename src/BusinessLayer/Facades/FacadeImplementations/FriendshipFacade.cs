@@ -7,16 +7,21 @@ namespace BusinessLayer.Facades.FacadeImplementations;
 
 public class FriendshipFacade : FacadeBase, IFriendshipFacade
 {
+    private readonly IChatService _chatService;
     private readonly IFriendshipService _friendshipService;
+    private readonly IUserChatService _userChatService;
     private readonly IUserService _userService;
     private readonly IUserService _userService2;
 
     public FriendshipFacade(IUnitOfWorkProvider provider,
-        IFriendshipService friendshipService, IUserService userService, IUserService userService2) : base(provider)
+        IFriendshipService friendshipService, IUserService userService, IUserService userService2,
+        IChatService chatService, IUserChatService userChatService) : base(provider)
     {
         _friendshipService = friendshipService;
         _userService = userService;
         _userService2 = userService2;
+        _chatService = chatService;
+        _userChatService = userChatService;
     }
 
     public async Task AddFriend(string jwtUsername, string usernameToBeFriend)
@@ -35,6 +40,23 @@ public class FriendshipFacade : FacadeBase, IFriendshipFacade
             FriendId = user.Id
         });
 
+        var chat = new ChatDto
+        {
+            Name = user.Name + " " + user2.Name,
+            Users = new List<UserChatDto>()
+        };
+
+        chat.Users.Add(new UserChatDto
+        {
+            UserId = user.Id
+        });
+
+        chat.Users.Add(new UserChatDto
+        {
+            UserId = user2.Id
+        });
+
+        await _chatService.CreateAsync(chat);
         await uow.CommitAsync();
     }
 
@@ -46,14 +68,8 @@ public class FriendshipFacade : FacadeBase, IFriendshipFacade
         var friends1 = await _friendshipService.GetAsync(user2.Id, user.Id);
         var friends2 = await _friendshipService.GetAsync(user.Id, user2.Id);
         if (friends1 is null && friends2 is null) throw new Exception("You have 0 friends :(");
-        if (friends1 is not null)
-        {
-            await _friendshipService.DeleteAsync(user2.Id, user.Id);
-        }
-        if (friends2 is not null)
-        {
-            await _friendshipService.DeleteAsync(user.Id, user2.Id);
-        }
+        if (friends1 is not null) await _friendshipService.DeleteAsync(user2.Id, user.Id);
+        if (friends2 is not null) await _friendshipService.DeleteAsync(user.Id, user2.Id);
         await uow.CommitAsync();
     }
 }

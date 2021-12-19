@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SeznamkaDbContext))]
-    [Migration("20211216201353_InitialMigration")]
+    [Migration("20211218234548_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,24 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Bans");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chats");
+                });
+
             modelBuilder.Entity("Domain.Entities.Friendship", b =>
                 {
                     b.Property<int>("UserId")
@@ -60,34 +78,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("FriendId");
 
                     b.ToTable("FriendUsers");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Chat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("MemberOneId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberTwoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberOneId");
-
-                    b.HasIndex("MemberTwoId");
-
-                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
@@ -214,6 +204,21 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Entities.UserChat", b =>
+                {
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChatId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserChat");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
                     b.Property<int>("Id")
@@ -273,25 +278,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Chat", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "MemberOne")
-                        .WithMany("Chats")
-                        .HasForeignKey("MemberOneId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.User", "MemberTwo")
-                        .WithMany()
-                        .HasForeignKey("MemberTwoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("MemberOne");
-
-                    b.Navigation("MemberTwo");
-                });
-
             modelBuilder.Entity("Domain.Entities.Message", b =>
                 {
                     b.HasOne("Domain.Entities.User", "Author")
@@ -322,6 +308,25 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.UserChat", b =>
+                {
+                    b.HasOne("Domain.Entities.Chat", "Chat")
+                        .WithMany("Users")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -336,6 +341,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Chat", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

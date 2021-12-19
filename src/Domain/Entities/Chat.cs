@@ -8,13 +8,7 @@ public class Chat : BaseEntity
     [MaxLength(50)]
     public string Name { get; set; }
 
-    public int MemberOneId { get; set; }
-
-    public virtual User MemberOne { get; set; }
-
-    public int MemberTwoId { get; set; }
-
-    public virtual User MemberTwo { get; set; }
+    public virtual IList<UserChat> Users { get; } = new List<UserChat>();
 
     public virtual IList<Message> Messages { get; } = new List<Message>();
 }

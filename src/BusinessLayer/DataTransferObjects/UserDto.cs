@@ -26,8 +26,6 @@ public class UserDto : BaseDto
 
     public double Latitude { get; set; }
 
-    public IList<ChatDto> Chats { get; set; }
-    
     public IList<BanWithUsernameDto> ReceivedBans { get; set; }
     
     public IList<BanWithUsernameDto> MyBans { get; set; }

@@ -13,7 +13,6 @@ public class FriendshipController : ControllerBase
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IFriendshipFacade _friendshipFacade;
-
     public FriendshipController(IHttpContextAccessor httpContextAccessor, IFriendshipFacade friendshipFacade)
     {
         _httpContextAccessor = httpContextAccessor;

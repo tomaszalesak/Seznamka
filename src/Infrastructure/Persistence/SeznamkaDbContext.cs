@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,15 +51,8 @@ public sealed class SeznamkaDbContext : DbContext
             .WithMany()
             .HasForeignKey(f => f.FriendId);
 
-        modelBuilder.Entity<Chat>()
-            .HasOne(c => c.MemberOne)
-            .WithMany(u => u.Chats)
-            .HasForeignKey(c => c.MemberOneId);
-
-        modelBuilder.Entity<Chat>()
-            .HasOne(c => c.MemberTwo)
-            .WithMany()
-            .HasForeignKey(c => c.MemberTwoId);
+        modelBuilder.Entity<UserChat>()
+            .HasKey(x => new { x.ChatId, x.UserId});
         
         modelBuilder.Entity<Ban>()
             .HasOne(ban => ban.Banner)
@@ -89,9 +83,7 @@ public sealed class SeznamkaDbContext : DbContext
 
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
-
-        // modelBuilder.Seed();
-
+        
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -38,7 +38,7 @@ public class User : BaseEntity
 
     public double Latitude { get; set; }
 
-    public virtual IList<Chat> Chats { get; } = new List<Chat>();
+    public virtual IList<UserChat> Chats { get; } = new List<UserChat>();
 
     public virtual IList<Ban> ReceivedBans { get; } = new List<Ban>();
     

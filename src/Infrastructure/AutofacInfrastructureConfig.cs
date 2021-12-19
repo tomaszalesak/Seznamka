@@ -29,6 +29,10 @@ namespace Infrastructure
                 .AsSelf()
                 .InstancePerDependency();
             
+            builder.RegisterType<UserChatQuery>()
+                .AsSelf()
+                .InstancePerDependency();
+            
             builder.RegisterType<UserPhotoQuery>()
                 .AsSelf()
                 .InstancePerDependency();

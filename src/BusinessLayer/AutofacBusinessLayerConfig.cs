@@ -57,12 +57,28 @@ namespace BusinessLayer
                 .As<QueryObjectBase<Ban, BanWithUsersDto, BannedUsersFilterDto, IQuery<Ban>>>()
                 .InstancePerDependency();
             
+            builder.RegisterType<ChatQueryObject>()
+                .As<QueryObjectBase<Chat, ChatDto, ChatFilterDto, IQuery<Chat>>>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<UserChatQueryObject>()
+                .As<QueryObjectBase<UserChat, UserChatDto, UserChatFilterDto, IQuery<UserChat>>>()
+                .InstancePerDependency();
+            
             builder.RegisterType<UserQuery>()
                 .As<IQuery<User>>()
                 .InstancePerDependency();
             
             builder.RegisterType<BanQuery>()
                 .As<IQuery<Ban>>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<ChatQuery>()
+                .As<IQuery<Chat>>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<UserChatQuery>()
+                .As<IQuery<UserChat>>()
                 .InstancePerDependency();
             
             builder.RegisterType<FriendshipQuery>()
