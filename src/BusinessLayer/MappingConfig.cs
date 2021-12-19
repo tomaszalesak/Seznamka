@@ -19,12 +19,14 @@ public static class MappingConfig
         config.CreateMap<Ban, BanWithUsernameDto>().ReverseMap();
         config.CreateMap<Preferences, PreferencesDto>().ReverseMap();
         config.CreateMap<User, UserDto>().ReverseMap();
+        config.CreateMap<Message, MessageDto>().ReverseMap();
         config.CreateMap<UserChat, UserChatDto>().ReverseMap();
         config.CreateMap<ChatUserNameDto, UserChatDto>().ReverseMap();
         config.CreateMap<User, UserNamesDto>().ReverseMap();
         config.CreateMap<User, UserRegistrationDto>().ReverseMap();
         config.CreateMap<Friendship, FriendshipwithUsernameDto>().ReverseMap();
         config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, UsernameUserFilterDto>>().ReverseMap();
+        config.CreateMap<QueryResult<Message>, QueryResultDto<MessageDto, MessageFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<User>, QueryResultDto<UserDto, FindUserFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<UserPhoto>, QueryResultDto<UserPhotoDto, UserPhotoFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<Ban>, QueryResultDto<BanWithUsersDto, BannedUsersFilterDto>>().ReverseMap();
