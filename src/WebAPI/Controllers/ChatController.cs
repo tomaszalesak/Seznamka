@@ -30,10 +30,10 @@ public class ChatController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ChatDto>> GetChat([FromQuery] int chatId)
+    public async Task<ActionResult<List<MessageDto>>> GetChatMessages([FromQuery] int chatId)
     {
         if (_httpContextAccessor.HttpContext == null) return Forbid();
-        var chat = await _chatFacade.GetChatByIdAsync(chatId);
-        return Ok(chat);
+        var mesages = await _chatFacade.GetChatByIdAsync(chatId);
+        return Ok(mesages);
     }
 }

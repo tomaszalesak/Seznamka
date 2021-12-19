@@ -25,8 +25,9 @@ public class ChatFacade : FacadeBase, IChatFacade
         return _userChatService.GetUserChats(user.Id);
     }
 
-    public async Task<ChatDto> GetChatByIdAsync(int chatId)
+    public async Task<IList<MessageDto>> GetChatByIdAsync(int chatId)
     {
-        return await _chatService.GetAsync(chatId);
+        var m = await _chatService.GetAsync(chatId);
+        return m.Messages;
     }
 }
