@@ -3,8 +3,6 @@ using BusinessLayer.DataTransferObjects;
 using BusinessLayer.Facades.FacadeInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using WebAPI.Hubs;
 
 namespace WebAPI.Controllers;
 
@@ -29,5 +27,13 @@ public class ChatController : ControllerBase
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         var chats = _chatFacade.GetMyChats(jwtUsername);
         return Ok(chats);
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<ChatDto>> GetChat([FromQuery] int chatId)
+    {
+        if (_httpContextAccessor.HttpContext == null) return Forbid();
+        var chat = await _chatFacade.GetChatByIdAsync(chatId);
+        return Ok(chat);
     }
 }
