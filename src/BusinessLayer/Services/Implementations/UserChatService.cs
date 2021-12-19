@@ -25,6 +25,7 @@ public class UserChatService : CrudQueryServiceBase<UserChat, UserChatDto, UserC
             {
                 new()
                 {
+                    Id = userChat.Chat.Users[0].User.Id,
                     Name = userChat.Chat.Users[0].User.Name,
                     Surname = userChat.Chat.Users[0].User.Surname,
                     Username = userChat.Chat.Users[0].User.Username,
@@ -32,6 +33,7 @@ public class UserChatService : CrudQueryServiceBase<UserChat, UserChatDto, UserC
                 },
                 new()
                 {
+                    Id = userChat.Chat.Users[1].User.Id,
                     Name = userChat.Chat.Users[1].User.Name,
                     Surname = userChat.Chat.Users[1].User.Surname,
                     Username = userChat.Chat.Users[1].User.Username,
