@@ -26,5 +26,5 @@ public class UserRegistrationDto
 
     public double Latitude { get; set; }
     public PreferencesDto Preferences { get; set; }
-    public byte[] Photo { get; set; }
+    public string Photo { get; set; }
 }

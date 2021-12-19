@@ -62,7 +62,7 @@ public class UserController : ControllerBase
 
         await using var stream = new MemoryStream();
         await form.Files[0].CopyToAsync(stream);
-        userDto.Photo = stream.ToArray();
+        userDto.Photo = Convert.ToBase64String(stream.ToArray());
 
         return Ok(await _userFacade.RegisterAsync(userDto));
     }
@@ -95,6 +95,6 @@ public class UserController : ControllerBase
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         username ??= jwtUsername;
         var photo = _userFacade.GetProfilePhoto(username);
-        return Ok(Convert.ToBase64String(photo.Image));
+        return Ok(photo.Image);
     }
 }

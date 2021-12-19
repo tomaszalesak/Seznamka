@@ -11,6 +11,8 @@ public static class MappingConfig
 {
     public static void ConfigureMap(IMapperConfigurationExpression config)
     {
+        config.CreateMap<string, byte[]>().ConvertUsing<Base64Converter>();
+        config.CreateMap<byte[], string>().ConvertUsing<Base64Converter>();
         config.CreateMap<UserPhoto, UserPhotoDto>().ReverseMap();
         config.CreateMap<Ban, BanDto>().ReverseMap();
         config.CreateMap<Chat, ChatDto>().ReverseMap();
@@ -34,5 +36,14 @@ public static class MappingConfig
         config.CreateMap<QueryResult<Friendship>, QueryResultDto<FriendshipDto, FriendshipFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<Chat>, QueryResultDto<ChatDto, ChatFilterDto>>().ReverseMap();
         config.CreateMap<QueryResult<UserChat>, QueryResultDto<UserChatDto, UserChatFilterDto>>().ReverseMap();
+    }
+    
+    private class Base64Converter : ITypeConverter<string, byte[]>, ITypeConverter<byte[], string>
+    {
+        public byte[] Convert(string source, byte[] destination, ResolutionContext context) 
+            => System.Convert.FromBase64String(source);
+
+        public string Convert(byte[] source, string destination, ResolutionContext context) 
+            => System.Convert.ToBase64String(source);
     }
 }
