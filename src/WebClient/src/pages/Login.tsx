@@ -39,9 +39,18 @@ const Login = () => {
               },
               data
             };
-            const { data: response } = await axios(config);
-            setLogUser({ jwt: response });
-            console.log(response);
+            const { data: jwt } = await axios(config);
+
+            const config2 = {
+              method: 'get' as Method,
+              url: 'https://localhost:7298/api/User',
+              headers: {
+                accept: 'text/plain',
+                Authorization: `Bearer ${jwt as string}`
+              }
+            };
+            const { data: user } = await axios(config2);
+            setLogUser({ jwt, user });
             navigate('/');
           } catch (err) {
             setSubmitError((err as { message?: string })?.message ?? 'Unknown error occurred');

@@ -3,7 +3,7 @@ export type User = {
   surname?: string;
   username?: string;
   asswordHash?: string;
-  birthdate?: string; // date, zatim nevim jak
+  birthdate?: string;
   gender?: number;
   height?: number;
   weight?: number;
@@ -11,12 +11,26 @@ export type User = {
   longitude?: number;
   latitude?: number;
   chats?: Chat[];
-  blockedUsers?: User[];
-  friendships?: string[]; //friedsihp dto neni
+  myBans?: Ban[];
+  friendships?: Friendships[];
   references?: Preferences;
   photo?: { image: string }[];
 };
 
+export type Friendships = {
+  userId?: number;
+  user?: User;
+  friendId?: number;
+  friend?: User;
+};
+
+export type Ban = {
+  id?: number;
+  bannedId?: number;
+  bannerId?: number;
+  banned?: User;
+  banner?: User;
+};
 export type Preferences = {
   minAge?: number;
   maxAge?: number;
