@@ -21,7 +21,8 @@ import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const Chats = () => {
   const [logUser, _setLogUser] = useLogginUser();
-  const [selectedChat, setSelectedChat] = useState<Chat>();
+  //const [selectedChat, setSelectedChat] = useState<Chat>();
+  const selectedChat = useRef<Chat>();
 
   const [chats, setChats] = useState<Chat[]>([]);
 
@@ -45,9 +46,6 @@ const Chats = () => {
       .configureLogging(LogLevel.Information)
       .withAutomaticReconnect()
       .build();
-
-    console.log(newConnection);
-
     setConnection(newConnection);
   }, []);
 
@@ -63,8 +61,6 @@ const Chats = () => {
           }
         };
         const { data: chats } = await axios(config);
-        console.log(chats);
-
         setChats(chats);
       }
     })();
@@ -75,14 +71,11 @@ const Chats = () => {
       connection
         .start()
         .then(_result => {
-          console.log('Connected!');
-
           connection.on('ReceiveMessage', (message: string, authorId: number) => {
-            console.log(selectedChat);
-            console.log(selectedChat?.users[1].id);
-            console.log(authorId);
-            if (authorId === selectedChat?.users[0].id || authorId === selectedChat?.users[1].id) {
-              console.log(message);
+            if (
+              authorId === selectedChat.current?.users[0].id ||
+              authorId === selectedChat.current?.users[1].id
+            ) {
               const mess: Message = { authorId, text: message };
               const updatedMessages = [...latestMassages.current];
               updatedMessages.push(mess);
@@ -95,24 +88,37 @@ const Chats = () => {
     }
   }, [connection]);
 
-  const handleListItemClick = (chat: Chat) => {
-    console.log(chat);
-    setSelectedChat(chat);
+  const handleListItemClick = async (chat: Chat) => {
+    selectedChat.current = chat;
+    if (logUser?.jwt) {
+      const config = {
+        method: 'get' as Method,
+        url: 'https://localhost:7298/api/Chat',
+        params: {
+          chatId: selectedChat.current.id
+        },
+        headers: {
+          accept: 'text/plain',
+          Authorization: `Bearer ${logUser.jwt}`
+        }
+      };
+      const { data: messages } = await axios(config);
+      setMessages(messages);
+    }
   };
 
   const addMessage = async () => {
-    if (selectedChat) {
+    if (selectedChat.current) {
       if (connection) {
         try {
           await connection.send(
             'SendChatMessage',
-            selectedChat.id,
+            selectedChat.current.id,
             logUser?.user.id,
-            selectedChat.users.find(element => element.username !== logUser?.user.username)
+            selectedChat.current.users.find(element => element.username !== logUser?.user.username)
               ?.username ?? '',
             fieldValue
           );
-          console.log('odeslano');
         } catch (e) {
           console.log(e);
         }
@@ -121,6 +127,14 @@ const Chats = () => {
       }
       setFieldValue('');
     }
+  };
+
+  const dateToString = (date: string | undefined) => {
+    if (date) {
+      const birth = new Date(date);
+      return `${birth.getDate()}.${birth.getMonth() + 1}.${birth.getFullYear()}`;
+    }
+    return 'Now';
   };
 
   return (
@@ -138,7 +152,7 @@ const Chats = () => {
           {chats.map(item => (
             <ListItemButton
               key={item.id}
-              selected={selectedChat === item}
+              selected={selectedChat?.current?.id === item.id}
               onClick={() => handleListItemClick(item)}
             >
               <ListItemAvatar>
@@ -172,7 +186,7 @@ const Chats = () => {
                 <Grid item xs={12}>
                   <ListItemText
                     sx={{ textAlign: logUser?.user.id === item.authorId ? 'right' : 'left' }}
-                    secondary={item.text}
+                    secondary={dateToString(item.sendTime)}
                   />
                 </Grid>
               </Grid>

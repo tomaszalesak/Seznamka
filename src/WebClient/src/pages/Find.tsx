@@ -66,6 +66,8 @@ const Find = () => {
       };
 
       const { data: response } = await axios(config);
+      console.log(response);
+
       setFindUsers(response);
     }
   };

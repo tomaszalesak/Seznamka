@@ -204,7 +204,11 @@ const Profile = () => {
               ''
             )}
           </CardActions>
-          <CardMedia component="img" image={profile?.photo?.[0].image} alt="random" />
+          <CardMedia
+            component="img"
+            src={`data:image/png;base64, ${profile?.photos?.[0].image}`}
+            alt="random"
+          />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {profile ? `${profile?.name} ${profile?.surname}` : ''}

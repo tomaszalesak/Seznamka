@@ -15,7 +15,7 @@ export type User = {
   myBans?: Ban[];
   friendships?: Friendships[];
   references?: Preferences;
-  photo?: { image: string }[];
+  photos?: { image: string }[];
 };
 
 export type Friendships = {
