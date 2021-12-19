@@ -10,4 +10,14 @@ public class UserChatQueryObject : QueryObjectBase<UserChat, UserChatDto, UserCh
     public UserChatQueryObject(IQuery<UserChat> query) : base(query)
     {
     }
+    
+    public override IQuery<UserChat> ApplyFilter(IQuery<UserChat> query, UserChatFilterDto
+        filter)
+    {
+        query = filter.UserId == null
+            ? query
+            : ((UserChatQuery)query)?.FilterByUserId(filter.UserId.Value);
+
+        return query;
+    }
 }

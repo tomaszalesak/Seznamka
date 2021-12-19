@@ -20,6 +20,7 @@ public static class MappingConfig
         config.CreateMap<Preferences, PreferencesDto>().ReverseMap();
         config.CreateMap<User, UserDto>().ReverseMap();
         config.CreateMap<UserChat, UserChatDto>().ReverseMap();
+        config.CreateMap<ChatUserNameDto, UserChatDto>().ReverseMap();
         config.CreateMap<User, UserNamesDto>().ReverseMap();
         config.CreateMap<User, UserRegistrationDto>().ReverseMap();
         config.CreateMap<Friendship, FriendshipwithUsernameDto>().ReverseMap();

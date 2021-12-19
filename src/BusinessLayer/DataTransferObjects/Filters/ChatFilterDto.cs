@@ -4,5 +4,4 @@ namespace BusinessLayer.DataTransferObjects.Filters;
 
 public class ChatFilterDto : FilterDtoBase
 {
-    
 }

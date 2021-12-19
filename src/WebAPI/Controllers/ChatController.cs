@@ -1,4 +1,6 @@
 ﻿using System.Security.Claims;
+using BusinessLayer.DataTransferObjects;
+using BusinessLayer.Facades.FacadeInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,18 +12,20 @@ namespace WebAPI.Controllers;
 public class ChatController : ControllerBase
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    // private readonly IChatFacade _chatFacade;
+    private readonly IChatFacade _chatFacade;
 
-    public ChatController(IHttpContextAccessor httpContextAccessor)
+    public ChatController(IHttpContextAccessor httpContextAccessor, IChatFacade chatFacade)
     {
         _httpContextAccessor = httpContextAccessor;
+        _chatFacade = chatFacade;
     }
     
-    [HttpPost("new")]
-    public async Task<ActionResult<string>> New([FromQuery] string username)
+    [HttpGet("mychats")]
+    public ActionResult<IList<ChatUserNameDto>> GetMyChats()
     {
         if (_httpContextAccessor.HttpContext == null) return Forbid();
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-        return Ok();
+        var chats = _chatFacade.GetMyChats(jwtUsername);
+        return Ok(chats);
     }
 }
