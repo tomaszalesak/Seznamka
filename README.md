@@ -12,6 +12,7 @@ Projektom bude implementovať webovú aplikáciu, systém na zoznamovanie ľudí
 - add migrations `dotnet ef migrations add "InitialMigration" --project src\Infrastructure --startup-project src\WebAPI --output-dir Persistence\Migrations`
 - database created automatically during migration, database connection string is managed in appsettings.json
 - start WebApi project in solution and go to `src/WebClient` and run `yarn` and `yarn start` for local development
+- API swagger interface will run on `https://localhost:7298/swagger/index.html` and frontend on `http://localhost:3000/`
 
 ## Autoři
 
