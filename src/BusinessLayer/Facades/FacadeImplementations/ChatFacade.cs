@@ -28,6 +28,6 @@ public class ChatFacade : FacadeBase, IChatFacade
     public async Task<IList<MessageDto>> GetChatByIdAsync(int chatId)
     {
         var m = await _chatService.GetAsync(chatId);
-        return m.Messages;
+        return m.Messages.OrderBy(x => x.SendTime).ToList();
     }
 }
