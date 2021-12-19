@@ -14,7 +14,6 @@ import { useEffect, useState } from 'react';
 import axios, { Method } from 'axios';
 
 import { useLogginUser } from '../hooks/useLoggedInUser';
-import useProfilePicture from '../hooks/useProfilePicture';
 import { User } from '../utils/types';
 
 const itemData = [
@@ -112,6 +111,8 @@ const Profile = () => {
           setBlocked(true);
         }
       });
+      console.log(logUser?.user);
+      console.log(profileUserName);
       logUser?.user.friendships?.forEach(friendship => {
         if (friendship?.friend?.username === profileUserName) {
           setFollow(true);
@@ -169,9 +170,9 @@ const Profile = () => {
   const genderToString = () => {
     if (profile?.gender !== null) {
       if (profile?.gender === 1) {
-        return `Male`;
-      } else if (profile?.gender === 0) {
         return `Female`;
+      } else if (profile?.gender === 0) {
+        return `Male`;
       } else {
         return 'Other';
       }

@@ -64,10 +64,7 @@ const Find = () => {
           Authorization: `Bearer ${logUser.jwt}`
         }
       };
-
       const { data: response } = await axios(config);
-      console.log(response);
-
       setFindUsers(response);
     }
   };
@@ -90,6 +87,7 @@ const Find = () => {
   }, [chipData]);
 
   useEffect(() => {
+    console.log(findUsers.totalNumberOfUsers);
     setPagesCount();
   }, [findUsers.totalNumberOfUsers]);
 

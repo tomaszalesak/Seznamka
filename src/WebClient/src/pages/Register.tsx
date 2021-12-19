@@ -136,43 +136,6 @@ const Register = () => {
           e.preventDefault();
           try {
             if (picture) {
-              //     const data = new FormData();
-              //     data.append('Gender', gender);
-              //     data.append('PreferencesDto.MaxAge', ageVal[1].toString());
-              //     data.append('PreferencesDto.MinWeight', weightVal[0].toString());
-              //     data.append('PreferencesDto.MaxHeight', heightVal[1].toString());
-              //     data.append('Height', height);
-              //     data.append('Bio', bio);
-              //     data.append('Name', firstname);
-              //     data.append('Latitude', '100');
-              //     data.append(
-              //       'Birthdate',
-              //       `${birth.getDate()}-${birth.getMonth() + 1}-${birth.getFullYear()}`
-              //     );
-              //     data.append('Longitude', '100');
-              //     data.append('PreferencesDto.MinHeight', heightVal[0].toString());
-              //     data.append('Photo', picture, picture.name);
-              //     data.append('PreferencesDto.MinAge', ageVal[0].toString());
-              //     data.append('PreferencesDto.GpsRadius', '100');
-              //     data.append('PreferencesDto.MaxWeight', weightVal[0].toString());
-              //     data.append('Username', email);
-              //     data.append('Weight', weight);
-              //     data.append('Surname', lastname);
-              //     data.append('Password', password);
-
-              //     const config = {
-              //       method: 'post' as Method,
-              //       url: 'https://localhost:7298/api/User/register',
-              //       headers: {
-              //         accept: '*/*'
-              //       },
-              //       data
-              //     };
-              //     const { data: jwt } = await axios(config);
-
-              const myHeaders = new Headers();
-              myHeaders.append('accept', '*/*');
-
               const data = new FormData();
               data.append('Gender', gender);
               data.append('PreferencesDto.MaxAge', ageVal[1].toString());
@@ -197,19 +160,15 @@ const Register = () => {
               data.append('Surname', lastname);
               data.append('Password', password);
 
-              const requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: data,
-                redirect: 'follow'
+              const config = {
+                method: 'post' as Method,
+                url: 'https://localhost:7298/api/User/register',
+                headers: {
+                  accept: '*/*'
+                },
+                data
               };
-
-              const response = await fetch(
-                'https://localhost:7298/api/User/register',
-                requestOptions as RequestInit
-              );
-              const jwt = await response.text();
-              console.log(jwt);
+              const { data: jwt } = await axios(config);
 
               const config2 = {
                 method: 'get' as Method,

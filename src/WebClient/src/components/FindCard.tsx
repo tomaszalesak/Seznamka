@@ -7,10 +7,6 @@ import { User } from '../utils/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FindCard: FC<User> = ({ name, surname, username, bio, photos }) => {
-  //const profilePhoto = useProfilePicture(photo);
-  console.log(photos?.[0].image);
-
-  const profilePhoto = 'https://images.unsplash.com/photo-1549388604-817d15aa0110';
   const navigate = useNavigate();
   return (
     <Grid item xs={12} sm={6} md={4}>
