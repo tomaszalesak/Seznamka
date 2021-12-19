@@ -67,7 +67,7 @@ public class FriendshipFacade : FacadeBase, IFriendshipFacade
         var user2 = _userService2.GetUserByUsername(username);
         var friends1 = await _friendshipService.GetAsync(user2.Id, user.Id);
         var friends2 = await _friendshipService.GetAsync(user.Id, user2.Id);
-        if (friends1 is null && friends2 is null) throw new Exception("You have 0 friends :(");
+        // if (friends1 is null && friends2 is null) throw new Exception("You have 0 friends :(");
         if (friends1 is not null) await _friendshipService.DeleteAsync(user2.Id, user.Id);
         if (friends2 is not null) await _friendshipService.DeleteAsync(user.Id, user2.Id);
         await uow.CommitAsync();
