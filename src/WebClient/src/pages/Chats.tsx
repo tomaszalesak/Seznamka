@@ -14,16 +14,16 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useRef, useState } from 'react';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import axios, { Method } from 'axios';
 
-import { Message } from '../utils/types';
-import { ChatWithEmail } from '../utils/firebase';
+import { Chat, Message } from '../utils/types';
 import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const Chats = () => {
   const [logUser, _setLogUser] = useLogginUser();
   const [selectedChat, setSelectedChat] = useState('');
 
-  const [chats, setChats] = useState<ChatWithEmail[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [fieldValue, setFieldValue] = useState('');
@@ -49,6 +49,23 @@ const Chats = () => {
     console.log(newConnection);
 
     setConnection(newConnection);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (logUser?.jwt) {
+        const config = {
+          method: 'get' as Method,
+          url: 'https://localhost:7298/api/Chat/mychats',
+          headers: {
+            accept: 'text/plain',
+            Authorization: `Bearer ${logUser.jwt}`
+          }
+        };
+        const { data: chats } = await axios(config);
+        setChats(chats);
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -142,13 +159,24 @@ const Chats = () => {
           {chats.map(item => (
             <ListItemButton
               key={item.id}
-              selected={selectedChat === item.id}
-              onClick={() => handleListItemClick(item.id)}
+              selected={
+                selectedChat ===
+                item.users.find(element => element.username !== logUser?.user.username)?.username
+              }
+              onClick={() =>
+                handleListItemClick(
+                  item.users.find(element => element.username !== logUser?.user.username)
+                    ?.username ?? ''
+                )
+              }
             >
               <ListItemAvatar>
                 <Avatar>N</Avatar>
               </ListItemAvatar>
-              <ListItemText>{item.email}</ListItemText>
+              <ListItemText>
+                {item.users.find(element => element.username !== logUser?.user.username)
+                  ?.username ?? ''}
+              </ListItemText>
             </ListItemButton>
           ))}
         </List>

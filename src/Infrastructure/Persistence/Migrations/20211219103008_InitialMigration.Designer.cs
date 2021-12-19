@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SeznamkaDbContext))]
-    [Migration("20211218234548_InitialMigration")]
+    [Migration("20211219103008_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,21 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Bans");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("FriendUsers");
+                });
+
             modelBuilder.Entity("Domain.Entities.Chat", b =>
                 {
                     b.Property<int>("Id")
@@ -63,21 +78,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Friendship", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("FriendUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
