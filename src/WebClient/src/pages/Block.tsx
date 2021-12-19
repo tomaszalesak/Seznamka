@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 
 import FindCard from '../components/FindCard';
 import { useLogginUser } from '../hooks/useLoggedInUser';
-import { Bans } from '../utils/types';
+import { Ban } from '../utils/types';
 
 const Block = () => {
   const [logUser, _setLogUser] = useLogginUser();
-  const [findUsers, setFindUsers] = useState<Bans[]>([]);
+  const [findUsers, setFindUsers] = useState<Ban[]>([]);
 
   useEffect(() => {
     const getProfile = async () => {

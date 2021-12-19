@@ -1,4 +1,5 @@
 export type User = {
+  id?: number;
   name?: string;
   surname?: string;
   username?: string;
@@ -51,16 +52,6 @@ export type Message = {
 };
 
 export type FindUsers = { users: User[]; totalNumberOfUsers: number };
-
-export type Bans = {
-  id?: number;
-  banned?: {
-    name?: string;
-    surname?: string;
-    username?: string;
-    id?: 1;
-  };
-};
 
 export type Chat = {
   name: string;

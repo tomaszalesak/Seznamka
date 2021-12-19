@@ -18,10 +18,10 @@ public class ChatHub : Hub
     public async Task SendChatMessage(int chatId, int authorId, string toUsername, string message)
     {
         await _messageFacade.SendMessageAsync(chatId, authorId, message);
+        await Clients.Caller.SendAsync("ReceiveMessage", message, authorId);
         foreach (var connectionId in Connections.GetConnections(toUsername))
         {
-            await Clients.Client(connectionId).SendAsync(message);
-            await Clients.Caller.SendAsync(message);
+            await Clients.Client(connectionId).SendAsync("ReceiveMessage", message, authorId);
         }
     }
 

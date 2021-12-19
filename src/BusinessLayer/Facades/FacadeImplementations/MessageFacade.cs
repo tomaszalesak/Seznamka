@@ -24,5 +24,6 @@ public class MessageFacade : FacadeBase, IMessageFacade
             Text = message,
             SendTime = DateTime.UtcNow
         });
+        await uow.CommitAsync();
     }
 }

@@ -21,7 +21,7 @@ import { useLogginUser } from '../hooks/useLoggedInUser';
 
 const Chats = () => {
   const [logUser, _setLogUser] = useLogginUser();
-  const [selectedChat, setSelectedChat] = useState('');
+  const [selectedChat, setSelectedChat] = useState<Chat>();
 
   const [chats, setChats] = useState<Chat[]>([]);
 
@@ -63,6 +63,8 @@ const Chats = () => {
           }
         };
         const { data: chats } = await axios(config);
+        console.log(chats);
+
         setChats(chats);
       }
     })();
@@ -75,65 +77,42 @@ const Chats = () => {
         .then(_result => {
           console.log('Connected!');
 
-          connection.on('ReceiveMessage', (message: Message) => {
-            const updatedMessages = [...latestMassages.current];
-            updatedMessages.push(message);
+          connection.on('ReceiveMessage', (message: string, authorId: number) => {
+            console.log(selectedChat);
+            console.log(selectedChat?.users[1].id);
+            console.log(authorId);
+            if (authorId === selectedChat?.users[0].id || authorId === selectedChat?.users[1].id) {
+              console.log(message);
+              const mess: Message = { authorId, text: message };
+              const updatedMessages = [...latestMassages.current];
+              updatedMessages.push(mess);
 
-            setMessages(updatedMessages);
+              setMessages(updatedMessages);
+            }
           });
         })
         .catch(e => console.log('Connection failed: ', e));
     }
   }, [connection]);
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(chatsCollection, snapshot => {
-  //     const result = snapshot.docs
-  //       .filter(
-  //         chat =>
-  //           chat.data().user1 === loggedInUser?.email || chat.data().user2 === loggedInUser?.email
-  //       )
-  //       .map(doc => {
-  //         const secondUser =
-  //           loggedInUser?.email === doc.data().user1 ? doc.data().user2 : doc.data().user1;
-  //         return { email: secondUser, id: doc.id, ...doc.data() };
-  //       });
-  //     setChats(result);
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [loggedInUser]);
-
-  // useEffect(() => {
-  //   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  //   let unsubscribe = () => {};
-  //   if (selectedChat !== '') {
-  //     const q = query(chatMessagesCollection(selectedChat), orderBy('createdAt'));
-  //     unsubscribe = onSnapshot(q, snapshot => {
-  //       const result = snapshot.docs.map(doc => doc.data());
-  //       setMessages(result);
-  //     });
-  //   }
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [selectedChat]);
-
-  const handleListItemClick = (index: string) => {
-    setSelectedChat(index);
+  const handleListItemClick = (chat: Chat) => {
+    console.log(chat);
+    setSelectedChat(chat);
   };
 
   const addMessage = async () => {
-    if (selectedChat !== '') {
-      const chatMessage = {
-        createdAt: new Date(),
-        time: new Date().toJSON().slice(0, 10).split('-').reverse().join('.'),
-        message: fieldValue
-      };
+    if (selectedChat) {
       if (connection) {
         try {
-          await connection.send('SendMessage', chatMessage);
+          await connection.send(
+            'SendChatMessage',
+            selectedChat.id,
+            logUser?.user.id,
+            selectedChat.users.find(element => element.username !== logUser?.user.username)
+              ?.username ?? '',
+            fieldValue
+          );
+          console.log('odeslano');
         } catch (e) {
           console.log(e);
         }
@@ -159,16 +138,8 @@ const Chats = () => {
           {chats.map(item => (
             <ListItemButton
               key={item.id}
-              selected={
-                selectedChat ===
-                item.users.find(element => element.username !== logUser?.user.username)?.username
-              }
-              onClick={() =>
-                handleListItemClick(
-                  item.users.find(element => element.username !== logUser?.user.username)
-                    ?.username ?? ''
-                )
-              }
+              selected={selectedChat === item}
+              onClick={() => handleListItemClick(item)}
             >
               <ListItemAvatar>
                 <Avatar>N</Avatar>
@@ -193,16 +164,16 @@ const Chats = () => {
             <ListItem key={index}>
               <Grid container>
                 <Grid item xs={12}>
-                  {/* <ListItemText
-                    sx={{ textAlign: loggedInUser?.email === item.author ? 'right' : 'left' }}
-                    primary={item.message}
-                  />*/}
+                  <ListItemText
+                    sx={{ textAlign: logUser?.user.id === item.authorId ? 'right' : 'left' }}
+                    primary={item.text}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                  {/* <ListItemText
-                    sx={{ textAlign: loggedInUser?.email === item.author ? 'right' : 'left' }}
-                    secondary={item.time}
-                  />*/}
+                  <ListItemText
+                    sx={{ textAlign: logUser?.user.id === item.authorId ? 'right' : 'left' }}
+                    secondary={item.text}
+                  />
                 </Grid>
               </Grid>
             </ListItem>
