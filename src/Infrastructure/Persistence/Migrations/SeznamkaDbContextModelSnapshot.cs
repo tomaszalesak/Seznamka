@@ -45,21 +45,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Bans");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Friendship", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("FriendUsers");
-                });
-
             modelBuilder.Entity("Domain.Entities.Chat", b =>
                 {
                     b.Property<int>("Id")
@@ -76,6 +61,21 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Friendship", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("FriendUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message", b =>
