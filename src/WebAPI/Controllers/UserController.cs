@@ -95,6 +95,6 @@ public class UserController : ControllerBase
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         username ??= jwtUsername;
         var photo = _userFacade.GetProfilePhoto(username);
-        return Ok(photo.Image);
+        return Ok(Convert.ToBase64String(photo.Image));
     }
 }
