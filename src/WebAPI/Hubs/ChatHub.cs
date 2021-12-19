@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BusinessLayer.Facades.FacadeInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
 
 namespace WebAPI.Hubs;
 
@@ -8,25 +8,32 @@ namespace WebAPI.Hubs;
 public class ChatHub : Hub
 {
     private static readonly ConnectionMapping<string> Connections = new();
+    private readonly IMessageFacade _messageFacade;
 
-    public void SendChatMessage(string who, string message)
+    public ChatHub(IMessageFacade messageFacade)
     {
-        foreach (var connectionId in Connections.GetConnections(who))
+        _messageFacade = messageFacade;
+    }
+
+    public async Task SendChatMessage(int chatId, int authorId, string toUsername, string message)
+    {
+        await _messageFacade.SendMessageAsync(chatId, authorId, message);
+        foreach (var connectionId in Connections.GetConnections(toUsername))
         {
-            Clients.Client(connectionId).SendAsync(message);
-            Clients.Caller.SendAsync(message);
+            await Clients.Client(connectionId).SendAsync(message);
+            await Clients.Caller.SendAsync(message);
         }
     }
-    
+
     public override Task OnConnectedAsync()
     {
-        Connections.Add(Context.User.Identity.Name, Context.ConnectionId);
+        if (Context.User is { Identity: { } }) Connections.Add(Context.User.Identity.Name, Context.ConnectionId);
         return base.OnConnectedAsync();
     }
 
     public override Task OnDisconnectedAsync(Exception exception)
     {
-        Connections.Remove(Context.User.Identity.Name, Context.ConnectionId);
+        if (Context.User is { Identity: { } }) Connections.Remove(Context.User.Identity.Name, Context.ConnectionId);
         return base.OnDisconnectedAsync(null);
     }
 }
