@@ -41,14 +41,6 @@ export type Preferences = {
   gpsRadius?: number;
 };
 
-export type Chat = {
-  name?: string;
-  memberOne?: User;
-  memberTwoId?: number;
-  memberTwo?: User;
-  messages?: Message;
-};
-
 export type Message = {
   authorId?: number;
   author?: User;
@@ -68,4 +60,11 @@ export type Bans = {
     username?: string;
     id?: 1;
   };
+};
+
+export type Chat = {
+  name: string;
+  users: User[];
+  messages: string[];
+  id: number;
 };
