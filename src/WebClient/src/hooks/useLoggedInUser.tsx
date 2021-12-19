@@ -1,7 +1,10 @@
 import { createContext, Dispatch, FC, SetStateAction, useContext, useState } from 'react';
 
+import { User } from '../utils/types';
+
 type UserJwt = {
   jwt: string;
+  user: User;
 };
 
 type UserState = [UserJwt | undefined, Dispatch<SetStateAction<UserJwt | undefined>>];

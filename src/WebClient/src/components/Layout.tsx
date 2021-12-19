@@ -187,7 +187,7 @@ const Layout: FC = ({ children }) => {
                     key="Sign out"
                     onClick={() => {
                       handleCloseNavMenu();
-                      setLogUser({ jwt: '' });
+                      setLogUser(undefined);
                       navigate('/login');
                     }}
                   >

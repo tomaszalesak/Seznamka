@@ -1,37 +1,38 @@
 import { Grid } from '@mui/material';
+import axios, { Method } from 'axios';
 import { useEffect, useState } from 'react';
 
 import FindCard from '../components/FindCard';
 import { useLogginUser } from '../hooks/useLoggedInUser';
-import { FindUsers } from '../utils/types';
+import { Friendships } from '../utils/types';
 
 const Following = () => {
   const [logUser, _setLogUser] = useLogginUser();
-  const [findUsers, setfindUsers] = useState<FindUsers>({ users: [], totalNumberOfUsers: 1 });
+  const [findUsers, setfindUsers] = useState<Friendships[]>([]);
 
-  // useEffect(() => {
-  //   const getProfile = async () => {
-  //     if (logUser?.jwt) {
-  //       const config = {
-  //         method: 'get' as Method,
-  //         url: '/api/Ban/banned',
-  //         headers: {
-  //           accept: 'text/plain',
-  //           Authorization: `Bearer ${logUser.jwt}`
-  //         }
-  //       };
+  useEffect(() => {
+    const getProfile = async () => {
+      if (logUser?.jwt) {
+        const config = {
+          method: 'get' as Method,
+          url: 'https://localhost:7298/api/User',
+          headers: {
+            accept: 'text/plain',
+            Authorization: `Bearer ${logUser.jwt}`
+          }
+        };
 
-  //       const { data: response } = await axios(config);
-  //       setFindUsers(response);
-  //     }
-  //   };
-  //   getProfile();
-  // }, []);
+        const { data: response } = await axios(config);
+        setfindUsers(response.friendships);
+      }
+    };
+    getProfile();
+  }, []);
 
   return (
     <Grid container spacing={4}>
-      {findUsers.users.map((user, index) => (
-        <FindCard key={index} {...user} />
+      {findUsers.map((user, index) => (
+        <FindCard key={index} {...user.friend} />
       ))}
     </Grid>
   );

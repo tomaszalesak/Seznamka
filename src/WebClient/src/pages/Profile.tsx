@@ -102,24 +102,42 @@ const Profile = () => {
     getProfile();
   }, []);
 
-  // const followHandler = async () => {
-  //   if (user?.email && profileId) {
-  //     await setDoc(userFollowDocument(user?.email, profileId), {
-  //       email: profileId,
-  //       first_name: profile?.first_name,
-  //       last_name: profile?.last_name
-  //     });
+  useEffect(() => {
+    if (profileUserName && profile) {
+      console.log(profile);
+      logUser?.user.myBans?.forEach(ban => {
+        console.log('ban');
 
-  //     const q1 = await getDoc(chatsDocument(`${user?.email}${profileId}`));
-  //     const q2 = await getDoc(chatsDocument(`${profileId}${user?.email}`));
-  //     if (!q1.exists() && !q2.exists())
-  //       await setDoc(chatsDocument(`${user?.email}${profileId}`), {
-  //         user1: user?.email,
-  //         user2: profileId
-  //       });
-  //     setFollow(true);
-  //   }
-  // };
+        if (ban?.banned?.username === profileUserName) {
+          setBlocked(true);
+        }
+      });
+      logUser?.user.friendships?.forEach(friendship => {
+        if (friendship?.friend?.username === profileUserName) {
+          setFollow(true);
+        }
+      });
+    }
+  }, [profile]);
+
+  const followHandler = async () => {
+    if (logUser?.jwt) {
+      const config = {
+        method: 'post' as Method,
+        url: 'https://localhost:7298/api/Friendship/addFriend',
+        params: {
+          user: profileUserName
+        },
+        headers: {
+          accept: 'text/plain',
+          Authorization: `Bearer ${logUser.jwt}`
+        }
+      };
+
+      await axios(config);
+      setFollow(true);
+    }
+  };
 
   const blockHandler = async () => {
     if (logUser?.jwt) {
@@ -167,7 +185,13 @@ const Profile = () => {
           <CardActions>
             {profileUserName ? (
               <>
-                {!follow ? <Button size="small">Follow</Button> : ''}
+                {!follow ? (
+                  <Button size="small" onClick={followHandler}>
+                    Follow
+                  </Button>
+                ) : (
+                  ''
+                )}
                 {!blocked ? (
                   <Button size="small" onClick={blockHandler}>
                     Block
