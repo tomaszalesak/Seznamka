@@ -8,8 +8,10 @@ Projektom bude implementovať webovú aplikáciu, systém na zoznamovanie ľudí
 
 ## How to
 
+- prerequisities are .NET 6 (VS 2022), SQL Server and NodeJS
 - add migrations `dotnet ef migrations add "InitialMigration" --project src\Infrastructure --startup-project src\WebAPI --output-dir Persistence\Migrations`
-- database updated automatically
+- database created automatically during migration, database connection string is managed in appsettings.json
+- start WebApi project in solution and go to `src/WebClient` and run `yarn` and `yarn start` for local development
 
 ## Autoři
 
