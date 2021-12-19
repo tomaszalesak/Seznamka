@@ -13,7 +13,7 @@ public class BanFacade : FacadeBase, IBanFacade
     private readonly IUserService _userService2;
 
     public BanFacade(IUnitOfWorkProvider provider, IUserService userService, IUserService userService2,
-        IBanService banService, IBannedUsersService bannedUsersService) :
+        IBanService banService, IBannedUsersService bannedUsersService, IFriendshipService friendshipService) :
         base(provider)
     {
         _userService = userService;
@@ -32,7 +32,6 @@ public class BanFacade : FacadeBase, IBanFacade
             BannedId = tUser.Id,
             BannerId = bUser.Id
         });
-
         await uow.CommitAsync();
     }
 

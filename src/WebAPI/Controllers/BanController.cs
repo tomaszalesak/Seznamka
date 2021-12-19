@@ -13,11 +13,13 @@ public class BanController : ControllerBase
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IBanFacade _banFacade;
+    private readonly IFriendshipFacade _friendshipFacade;
 
-    public BanController(IHttpContextAccessor httpContextAccessor, IBanFacade banFacade)
+    public BanController(IHttpContextAccessor httpContextAccessor, IBanFacade banFacade, IFriendshipFacade friendshipFacade)
     {
         _httpContextAccessor = httpContextAccessor;
         _banFacade = banFacade;
+        _friendshipFacade = friendshipFacade;
     }
 
     [HttpPost]
@@ -26,6 +28,7 @@ public class BanController : ControllerBase
         if (_httpContextAccessor.HttpContext == null) return Forbid();
         var jwtUsername = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         await _banFacade.Ban(jwtUsername, usernameToBan);
+        await _friendshipFacade.RemoveFriend(jwtUsername, usernameToBan);
         return Ok();
     }
     

@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using BusinessLayer.DataTransferObjects;
 using BusinessLayer.Facades.FacadeInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
