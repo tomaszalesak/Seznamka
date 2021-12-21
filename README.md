@@ -2,7 +2,7 @@
 
 Seznamka : .NET 6 Web API, SPA klient v Reactu a TypeScriptu
 
-## Sample video
+## Updated presentation video
 
 https://drive.google.com/file/d/1miF-keIvC7s4PoRnp8fzsU3qUAo-J2IQ/view?usp=sharing
 
